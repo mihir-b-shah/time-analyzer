@@ -34,17 +34,13 @@ class ExtensionError extends Error {
 
 class UserEvent {
     constructor(type){
-        
-        if(topWindowId === null){
-            throw new ExtensionError("Window id is null.");
-        }
-        
         this.type = type;
         
         let tabIdRes = null;
         let tabRes = null;
         
-        if((tabIdRes = activeTabs.get(topWindowId)) !== undefined && 
+        if (topWindowId !== null &&
+           (tabIdRes = activeTabs.get(topWindowId)) !== undefined && 
            (tabRes = tabIds.get(tabIdRes)) !== undefined){
             this.url = tabRes.url;
         }
@@ -57,8 +53,22 @@ class UserEvent {
 
 /* this is dangerous, possibly causes race condition */
 window.onload = (event) => {
-    chrome.windows.getLastFocused((win)=>{topWindowId = win.id;}); 
-};
+    chrome.windows.getAll((windows) => {
+        for(win of windows){
+            if(win.focused){
+                topWindowId = win.id;
+            }
+            chrome.tabs.getAllInWindow(win.id, (tabs) => {
+                for(tab of tabs){
+                    if(tab.active){
+                        activeTabs.set(win.id, tab.id);
+                    }
+                    tabIds.set(tab.id, tab);
+                }
+            });
+        }
+    });
+}
 
 /* --------------------- helpers ------------------------------- */
 
@@ -102,8 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /*
     link.addEventListener('click', function() {
         
-    });
-    */
+    }); */
 });
 
 /* ------------------- tracking callbacks----------------------- */
@@ -126,11 +135,17 @@ chrome.tabs.onUpdated.addListener(
     }
 );
 
+/*** NOTE THAT TAB CREATED FIRED WHEN USER CREATES ONE NOT WHEN ONE IS CREATED IN GENERAL ***/
+
+
 /* if it is proper tab, add it to tabIds. We do not update activeTabs
-   because onActivated() will do that for us. */
+   because onActivated() will do that for us- unless it is first tab.*/
 chrome.tabs.onCreated.addListener(
     function crAction(tab){
         if(tab.id !== undefined){
+            if(!activeTabs.has(tab.windowId)){
+                activeTabs.set(tab.windowId, tab.id);
+            }
             tabIds.set(tab.id, tab);
         }
     }
@@ -174,11 +189,12 @@ chrome.windows.onFocusChanged.addListener(
 chrome.windows.onRemoved.addListener(
     function winRemAction(id){
         activeTabs.delete(id);
-        if(activeTabs.size == 0){
-            recordEvent(CallerType.FOCUS);
-        }
         if(topWindowId === id){
             topWindowId = null;
+        }
+        log(topWindowId);
+        if(activeTabs.size == 0){
+            recordEvent(CallerType.FOCUS);
         }
     }
 );
