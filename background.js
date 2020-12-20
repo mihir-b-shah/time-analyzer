@@ -11,12 +11,18 @@ let tabIds = new Map();
    will get called to initialize this. */
 let topWindowId = null;
 
+/* avoids making post request every time */
+let eventBuffer = [];
+
+const EVENT_BUF_MAX_SIZE = 10;
+
 /* --------------------- types --------------------------------- */
 
 const CallerType = Object.freeze({
     ACTIVATE : 0,
     UPDATE   : 1,
-    FOCUS    : 2
+    FOCUS    : 2,
+    SENTINEL : 3
 });
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
@@ -88,21 +94,45 @@ function ifCurrentWindow(winID, func, param){
     }
 }
 
-// need to optimize this function 
-function recordEvent(callerType){
-    fetch("http://localhost:8080", { 
+async function sendEvent(cleanup){
+    const res = await fetch("http://localhost:8080", { 
         method: "POST",
         
-        body: JSON.stringify(new UserEvent(callerType)), 
+        body: JSON.stringify(eventBuffer), 
 
         headers: { 
             "Content-type": "application/json; charset=UTF-8"
         } 
-    }).then(response => {
-        if(!response.ok){
-            throw new ExtensionError('Recent user event not sent.');
-        }
     });
+    
+    cleanup();
+    
+    if(!res.ok){
+        throw new ExtensionError('Recent user event not sent.');
+    }
+}
+
+function sendAndClean(){
+    sendEvent(()=>{
+        eventBuffer = [];
+    });
+}
+
+function recordEvent(callerType){    
+    eventBuffer.push(new UserEvent(callerType));
+    if(eventBuffer.length === EVENT_BUF_MAX_SIZE){
+        sendAndClean();
+    }
+}
+
+function endSession(){
+    eventBuffer.push(new UserEvent(CallerType.SENTINEL));
+    sendAndClean();
+    
+    // reset everything in case.
+    activeTabs = new Map();
+    tabIds = new Map();
+    topWindowId = null;
 }
 
 /* ------------------- DOM callbacks --------------------------- */
@@ -192,9 +222,8 @@ chrome.windows.onRemoved.addListener(
         if(topWindowId === id){
             topWindowId = null;
         }
-        log(topWindowId);
         if(activeTabs.size == 0){
-            recordEvent(CallerType.FOCUS);
+            endSession();
         }
     }
 );
