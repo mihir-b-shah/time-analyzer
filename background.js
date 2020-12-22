@@ -1,4 +1,6 @@
 
+"use strict";
+
 /* --------------------- mutable state ------------------------- */
 
 /* maps window id -> tab id */

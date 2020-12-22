@@ -1,4 +1,6 @@
 
+"use strict";
+
 /* adapted from node.js docs */
 const http = require('http');
 
@@ -13,9 +15,9 @@ const EventType = Object.freeze({
     SENTINEL : 3
 }); 
 
-let buffer = '';
-let hist = new Map();
-let queue = [];
+let buffer = null;
+let prevReceived = null;
+let prevAccepted = null;
 
 /* unifies all invalid reasons to null */
 function cleanURL(urlStr){
@@ -45,22 +47,15 @@ function isProperEvent(ev){
         return false;
     }
     
-    time = ev.time;
-    
-    switch(ev.type){
-        case EventType.ACTIVATE:
-            break;
-        case EventType.UPDATE:
-            break;
-        case EventType.FOCUS:
-            break;
-        case EventType.SENTINEL:
-            break;
-        default:
-            break;
+    if(ev.type == EventType.UPDATE && prevRecived !== null &&
+        prevReceived.type == EventType.ACTIVATE && prevReceived !== prevAccepted){
+        return false;
     }
+
+    return true;
 }
 
+// change this to real emails.
 const server = http.createServer((req, res) => {
     req.on('data', (data) => {
         buffer += data.toString();
@@ -71,8 +66,10 @@ const server = http.createServer((req, res) => {
 
         for(ev of events){
             if(isProperEvent(ev)){
-                queue.push(ev);
+                // ev.url, prevAccepted.time, ev.time
+                prevAccepted = ev;
             }
+            prevReceived = ev;
         }
         
         buffer = '';
@@ -84,5 +81,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, hostname, () => {
+    buffer = '';
+
     console.log(`Server running at http://${hostname}:${port}/`);
 });
