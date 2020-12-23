@@ -2,10 +2,13 @@
 "use strict";
 
 /* adapted from node.js docs */
-const http = require('http');
+const express = require('express');
+const database = require('./database.js');
+const evFilt = require('./eventFilter.js');
+const ejs = require('ejs');
 
-const hostname = '127.0.0.1'; // localhost
 const port = 8080;
+const app = express();
 
 // js excuse for an enum
 const EventType = Object.freeze({
@@ -15,73 +18,69 @@ const EventType = Object.freeze({
     SENTINEL : 3
 }); 
 
-let buffer = null;
-let prevReceived = null;
-let prevAccepted = null;
+let buffer = '';
 
-/* unifies all invalid reasons to null */
-function cleanURL(urlStr){
-    if(urlStr === undefined){
-        return null;
-    }
-    // simplest way to check if url is valid.
-    let url = null;
-    try {
-        url = new URL(urlStr);
-    } catch (error) {
-        return null;
-    }
-    switch(url.protocol){
-        case 'http:':
-        case 'https:':
-            return url.hostname;
-        default:
-            return null;
-    }
+let prevReceived = new Map();
+let db = new database.Database();
+let currResult = null;
+
+function initDB(){
+    db.on('error', (msg)=>{
+        console.log('error in sql query: ' + msg);
+    });
+    
+    db.on('insert', ()=>{
+    });
+
+    db.on('summary', (rows)=>{
+        // render page.
+        currResult.render('summary', {webpages:rows});
+        currResult.sendStatus(200);
+    });
 }
 
-function isProperEvent(ev){    
-    url = cleanURL(ev.url);
-    
-    if(url === null){
-        return false;
-    }
-    
-    if(ev.type == EventType.UPDATE && prevRecived !== null &&
-        prevReceived.type == EventType.ACTIVATE && prevReceived !== prevAccepted){
-        return false;
-    }
-
-    return true;
-}
-
-// change this to real emails.
-const server = http.createServer((req, res) => {
+app.post('/', (req, res) => {
     req.on('data', (data) => {
         buffer += data.toString();
     });
 
     req.on('end', () => {
-        events = JSON.parse(buffer);
+        let packet = JSON.parse(buffer);
+        let email = packet.id;
+        let events = packet.data;
+        let pred = null;
 
-        for(ev of events){
-            if(isProperEvent(ev)){
-                // ev.url, prevAccepted.time, ev.time
-                prevAccepted = ev;
+        for(let ev of events){
+            pred = prevReceived.get(email);
+
+            // overwrites with different type, should be fine in JS.
+            if((ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined){
+                console.log(`email: ${email}, url: ${pred.url}, start time: ${pred.time}, end time: ${ev.time}`);
+                db.insert(email, pred.url, pred.time, ev.time);
             }
-            prevReceived = ev;
+            prevReceived.set(email, ev);
         }
         
         buffer = '';
     });
     
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end();
+    res.sendStatus(200);
 });
 
-server.listen(port, hostname, () => {
-    buffer = '';
-
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.get('/summary', (req, res) => {
+    let email = req.query.id;
+    currResult = res;
+    db.getUserSummary(email);
 });
+
+initDB();
+
+app.set('views', __dirname);
+app.set('view engine', 'ejs');
+
+app.listen(port, function(error){ 
+    if(error){
+        throw error;
+    } 
+    console.log("Server created Successfully!"); 
+}); 

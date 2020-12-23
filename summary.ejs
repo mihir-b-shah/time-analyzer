@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Time spent on webpages:
+        </title>
+    </head>
+    <body>
+        <h3>
+            Here is your breakdown by webpage.
+        </h3>
+        <table>
+            <tr>
+               <th>Webpage</th><th>Time</th>
+            </tr>
+         
+            <% for (let i = 0; i < webpages.length; ++i) { %>
+             <tr>
+               <td><%= webpages[i].hostname %></td>
+               <td><%= webpages[i].totalTime %></td>
+             </tr>    
+            <% } %>
+         </table>
+    </body>
+</html>

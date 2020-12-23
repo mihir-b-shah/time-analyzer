@@ -1,9 +1,20 @@
 
-const database = require('./database.js');
+const express = require('express');
+const ejs = require('ejs');
 
-let dbse = new database.Database();
-dbse.loadTable();
-dbse.makeTable();
-dbse.insert('mihirshah.11204@gmail.com', 'https://google.com', 1608614095646, 1608614096000);
-dbse.insert('bipin.supriya@gmail.com', 'https://bing.com', 1608614096891, 1608614096911);
-dbse.release();
+const app = express();
+
+app.set('views', __dirname);
+app.set('view engine', 'ejs');
+  
+app.get('/summary', function(req, res){ 
+    people = [{'dimension':4,'quantity':5, 'factory':6}, {'dimension':1,'quantity':2, 'factory':3}, {'dimension':7,'quantity':8, 'factory':9}];
+    res.render('summary', {quotation:people});
+});
+  
+app.listen(8080, function(error){ 
+    if(error){
+        throw error;
+    } 
+    console.log("Server created Successfully!"); 
+}); 

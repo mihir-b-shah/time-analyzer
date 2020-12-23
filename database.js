@@ -2,38 +2,19 @@
 "use strict";
 
 const sqlite = require('sqlite3').verbose();
+const evem = require('events');
 
-class Database {
+class Database extends evem.EventEmitter {
 
-    loadTable(){
-        this.db = new sqlite.Database('./users.db', sqlite.OPEN_READWRITE | sqlite.OPEN_CREATE, 
-            (err) => {
+    constructor(){
+        super();
+        this.db = new sqlite.Database('./users.db', (err) => {
                 if (err) {
                     console.error(err.message);
                 }
                 console.log('Connected to the user database.');
             }
         );
-    }
-
-    // mutations should run sequentially
-    makeTable(){
-        this.db.serialize();
-        const BuildTable = 
-            "create table if not exists Events ("+
-                "email   varchar(255)   not null,"+
-                "url     varchar(128)   not null,"+
-                "start   datetime       not null,"+ 
-                "end     datetime       not null "+
-            ");";
-
-        this.db.run(BuildTable, (err) => {
-            if (err) {
-                console.error(err.message);
-            }
-        });
-
-        this.db.parallelize();
     }
 
     padNumber(intg){
@@ -47,20 +28,38 @@ class Database {
                 `${this.padNumber(date.getSeconds())} ${date.getHours()>=12?'PM':'AM'}`
     }
 
-    // mutations should run sequentially
     insert(email, url, start, end){
-        this.db.serialize();
+        const _email = email.substr(0, Math.min(email.length, this.MaxEmailLength));
+        const _host = url.hostname.substr(0, Math.min(url.hostname.length, this.MaxHostLength));
+        const _url = url.href.substr(0, Math.min(url.href.length, this.MaxURLLength));
+
         const InsertEvent =
-            "insert into Events (email, url, start, end) "+
-            `values ('${email}', '${url}', '${this.fmtDate(start)}', '${this.fmtDate(end)}');`
+            'insert into Events (email, url, host, start, end) '+
+            `values ('${_email}', '${_url}', '${_host}', '${this.fmtDate(start)}', '${this.fmtDate(end)}');`
 
         this.db.run(InsertEvent, (err)=>{
-            if(err){
-                console.error(err.message);
+            if(err !== null){
+                this.emit('error', 'insert');
+            } else {
+                this.emit('insert');
             }
         });
+    }
 
-        this.db.parallelize();
+    getUserSummary(email){
+        const GetUserData = 
+            'select host as hostname, sum(time) as totalTime from Events '+
+            `where email = ${email} `+
+            'group by host '+
+            'order by totalTime desc;';
+
+        this.db.all(GetUserData, (err, rows) => {
+            if(err !== null){
+                this.emit('error', 'select');
+            } else {
+                this.emit('summary', rows);
+            }
+        });
     }
 
     release(){

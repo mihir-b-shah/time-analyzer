@@ -18,6 +18,9 @@ let eventBuffer = [];
 
 const EVENT_BUF_MAX_SIZE = 10;
 
+/* cache the user's email */
+let userEmail = null;
+
 /* --------------------- types --------------------------------- */
 
 const CallerType = Object.freeze({
@@ -62,17 +65,22 @@ class UserEvent {
 /* this is dangerous, possibly causes race condition */
 window.onload = (event) => {
     chrome.windows.getAll((windows) => {
-        for(win of windows){
+        for(let win of windows){
             if(win.focused){
                 topWindowId = win.id;
             }
             chrome.tabs.getAllInWindow(win.id, (tabs) => {
-                for(tab of tabs){
+                for(let tab of tabs){
                     if(tab.active){
                         activeTabs.set(win.id, tab.id);
                     }
                     tabIds.set(tab.id, tab);
                 }
+
+                // finally get the user email.
+                chrome.identity.getProfileUserInfo((info)=>{
+                    userEmail = info.email;
+                });
             });
         }
     });
@@ -100,7 +108,7 @@ async function sendEvent(cleanup){
     const res = await fetch("http://localhost:8080", { 
         method: "POST",
         
-        body: JSON.stringify(eventBuffer), 
+        body: JSON.stringify({'id':userEmail, 'data':eventBuffer}), 
 
         headers: { 
             "Content-type": "application/json; charset=UTF-8"
@@ -112,6 +120,16 @@ async function sendEvent(cleanup){
     if(!res.ok){
         throw new ExtensionError('Recent user event not sent.');
     }
+}
+
+async function serveStats(){
+    const res = await fetch("http://localhost:8080/summary" + new URLSearchParams({'id':userEmail}));
+
+    if(!res.ok){
+        throw new ExtensionError('Recent user event not sent.');
+    }
+
+    return res;
 }
 
 function sendAndClean(){
@@ -137,14 +155,16 @@ function endSession(){
     topWindowId = null;
 }
 
-/* ------------------- DOM callbacks --------------------------- */
+/* ------------------------ DOM -------------------------------- */
 
 document.addEventListener('DOMContentLoaded', function() {
-    let link = document.getElementById('checkPage');
-    /*
+    let link = document.getElementById('summary');
     link.addEventListener('click', function() {
-        
-    }); */
+        chrome.tabs.create({'url':'http://localhost:8080/summary'}, (res)=>{
+            sendAndClean();
+            serveStats();
+        });
+    });
 });
 
 /* ------------------- tracking callbacks----------------------- */
