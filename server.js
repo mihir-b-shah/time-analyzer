@@ -65,30 +65,24 @@ app.post('/', (req, res) => {
     req.on('end', () => {
         let packet = JSON.parse(buffer);
         let email = packet.id;
-        let events = packet.data;
+        let ev = packet.data;
 
-        let pred = null;
-        let predAc = null;
+        let pred = prevReceived.get(email);
+        let predAc = prevAccepted.get(email);
+        console.log(JSON.stringify(ev));
 
-        for(let ev of events){
+        let restCond = (ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined;
 
-            console.log(JSON.stringify(ev));
-
-            pred = prevReceived.get(email);
-            predAc = prevAccepted.get(email);
-
-            let restCond = (ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined;
-
-            // overwrites with different type, should be fine in JS.
-            if(restCond && predAc !== undefined){
-                // console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
-                db.insert(email, predAc.url, predAc.time, ev.time);
-                prevAccepted.set(email, ev);
-            } else if(restCond){
-                prevAccepted.set(email, ev);
-            }
-            prevReceived.set(email, ev);
+        // overwrites with different type, should be fine in JS.
+        if(restCond && predAc !== undefined){
+            // console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
+            db.insert(email, predAc.url, predAc.time, ev.time);
+            prevAccepted.set(email, ev);
+        } else if(restCond){
+            prevAccepted.set(email, ev);
         }
+        prevReceived.set(email, ev);
+
         console.log('boom!');
         
         buffer = '';

@@ -13,11 +13,6 @@ let tabIds = new Map();
    will get called to initialize this. */
 let topWindowId = null;
 
-/* avoids making post request every time */
-let eventBuffer = [];
-
-const EVENT_BUF_MAX_SIZE = 10;
-
 /* cache the user's email */
 let userEmail = null;
 
@@ -105,11 +100,11 @@ function ifCurrentWindow(winID, func, param){
     }
 }
 
-async function sendEvent(cleanup){
+async function sendEvent(cleanup, ev){
     const res = await fetch("http://localhost:8080", { 
         method: "POST",
         
-        body: JSON.stringify({'id':userEmail, 'data':eventBuffer}), 
+        body: JSON.stringify({'id':userEmail, 'data':ev}), 
 
         headers: { 
             "Content-type": "application/json; charset=UTF-8"
@@ -123,22 +118,13 @@ async function sendEvent(cleanup){
     }
 }
 
-function sendAndClean(){
-    sendEvent(()=>{
-        eventBuffer = [];
-    });
-}
 
 function recordEvent(callerType){    
-    eventBuffer.push(new UserEvent(callerType));
-    if(eventBuffer.length === EVENT_BUF_MAX_SIZE){
-        sendAndClean();
-    }
+    sendEvent(()=>{}, new UserEvent(callerType));
 }
 
 function endSession(){
-    eventBuffer.push(new UserEvent(CallerType.SENTINEL));
-    sendAndClean();
+    sendEvent(()=>{}, new UserEvent(CallerType.SENTINEL));
     
     // reset everything in case.
     activeTabs = new Map();
@@ -152,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let link = document.getElementById('summary');
     link.addEventListener('click', function() {
         sendEvent(()=>{
-            eventBuffer = [];
             chrome.tabs.create({'url':'http://localhost:8080/summary?' 
                 + new URLSearchParams({'id':userEmail})}, (res)=>{});
         });
@@ -237,6 +222,7 @@ chrome.windows.onRemoved.addListener(
             topWindowId = null;
         }
         if(activeTabs.size == 0){
+            log('ending.');
             endSession();
         }
     }
