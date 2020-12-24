@@ -1,0 +1,113 @@
+PS C:\Users\mihir\Google Drive\TimeAnalyzer> node server.js
+Server created Successfully!
+Connected to the user database.
+{"type":0,"url":"https://codeforces.com/blog/entry/57282","time":1608776056914}
+boom!
+{"type":0,"url":"","time":1608776045130}
+{"type":1,"url":"https://www.google.com/","time":1608776045912}
+{"type":1,"url":"https://godbolt.org/","time":1608776047996}
+{"type":1,"url":"https://codeforces.com/blog/entry/57282","time":1608776052804}
+{"type":0,"url":"","time":1608776057840}
+{"type":2,"url":"","time":1608776057843}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776057895}
+{"type":0,"url":"","time":1608776063910}
+{"type":1,"url":"chrome://newtab/","time":1608776063937}
+{"type":1,"url":"https://artofproblemsolving.com/wiki/index.php?title=Resources_for_mathematics_competitions","time":1608776066218}
+boom!
+{"type":3,"time":1608776070679}
+boom!
+{"type":0,"url":"http://www.viemu.com/a-why-vi-vim.html","time":1608776084712}
+boom!
+{"type":0,"url":"","time":1608776080741}
+{"type":1,"url":"https://www.google.com/","time":1608776081755}
+{"type":1,"url":"http://www.viemu.com/a-why-vi-vim.html","time":1608776084120}
+{"type":0,"url":"","time":1608776085469}
+{"type":2,"url":"","time":1608776085474}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776085592}
+{"type":0,"url":"http://www.viemu.com/a-why-vi-vim.html","time":1608776086915}
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776087681}
+{"type":0,"url":"","time":1608776091674}
+{"type":1,"url":"chrome://newtab/","time":1608776091706}
+boom!
+{"type":0,"url":"chrome://newtab/","time":1608776097415}
+boom!
+{"type":1,"url":"https://artofproblemsolving.com/wiki/index.php?title=Resources_for_mathematics_competitions","time":1608776093511}
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776093956}
+{"type":0,"url":"https://artofproblemsolving.com/wiki/index.php?title=Resources_for_mathematics_competitions","time":1608776095290}
+{"type":0,"url":"","time":1608776096016}
+{"type":1,"url":"chrome://newtab/","time":1608776096042}
+{"type":0,"url":"","time":1608776098152}
+{"type":2,"url":"","time":1608776098153}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776098197}
+{"type":0,"url":"chrome://newtab/","time":1608776105158}
+{"type":1,"url":"chrome://newtab/","time":1608776105541}
+boom!
+{"type":0,"url":"chrome://newtab/","time":1608776111576}
+boom!
+{"type":1,"url":"file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf","time":1608776106184}
+{"type":0,"url":"https://artofproblemsolving.com/wiki/index.php?title=Resources_for_mathematics_competitions","time":1608776107084}
+{"type":0,"url":"file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf","time":1608776107894}
+{"type":0,"url":"http://igoro.com/archive/gallery-of-processor-cache-effects/","time":1608776108412}
+{"type":0,"url":"","time":1608776110005}
+{"type":1,"url":"chrome://newtab/","time":1608776110029}
+{"type":0,"url":"","time":1608776112400}
+{"type":2,"url":"","time":1608776112403}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776112520}
+{"type":0,"url":"","time":1608776115588}
+boom!
+{"type":0,"url":"https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf","time":1608776118943}
+boom!
+{"type":1,"url":"chrome://newtab/","time":1608776115621}
+{"type":1,"url":"https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf","time":1608776117255}
+{"type":0,"url":"","time":1608776119654}
+{"type":2,"url":"","time":1608776119659}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776119702}
+{"type":0,"url":"https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf","time":1608776126276}
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776126974}
+{"type":0,"url":"","time":1608776128054}
+{"type":1,"url":"chrome://newtab/","time":1608776128089}
+{"type":1,"url":"https://stackoverflow.com/questions/26246040/whats-missing-sub-optimal-in-this-memcpy-implementation","time":1608776132119}
+boom!
+{"type":0,"url":"https://stackoverflow.com/users","time":1608776138433}
+boom!
+{"type":0,"url":"https://www.kfsk.org/board-and-staff/","time":1608776179749}
+boom!
+{"type":0,"url":"","time":1608776157155}
+{"type":1,"url":"https://www.google.com/","time":1608776157903}
+{"type":1,"url":"https://www.google.com/search?gs_ssp=eJzj4tTP1TdIqSosMDVg9OJPyc9LzElRKCkqzS1QyCoCAIADCVM&q=donald+trump+jr&oq=dona&aqs=chrome.2.69i57j46i39j46i433l2j0j69i61l2j69i60.4323j0j4&sourceid=chrome&ie=UTF-8","time":1608776164864}
+{"type":1,"url":"https://www.kfsk.org/2020/12/21/trump-jr-posts-on-trip-through-petersburg/","time":1608776167857}
+{"type":1,"url":"https://www.kfsk.org/board-and-staff/","time":1608776171052}
+{"type":2,"url":"https://www.kfsk.org/board-and-staff/","time":1608776176025}
+{"type":0,"url":"","time":1608776177850}
+{"type":1,"url":"chrome://newtab/","time":1608776177882}
+{"type":0,"url":"https://www.kfsk.org/board-and-staff/","time":1608776178415}
+{"type":0,"url":"","time":1608776180666}
+boom!
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776180819}
+{"type":0,"url":"chrome://newtab/","time":1608776198094}
+{"type":1,"url":"chrome://extensions/","time":1608776200632}
+{"type":2,"url":"chrome://extensions/","time":1608776203515}
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776203524}
+{"type":2,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776208175}
+{"type":0,"url":"https://www.kfsk.org/board-and-staff/","time":1608776211947}
+{"type":0,"url":"chrome://extensions/","time":1608776212778}
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776213482}
+{"type":2,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776217711}
+boom!
+{"type":0,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608776218460}
+{"type":3,"time":1608776219182}
+boom!
+
+PS C:\Users\mihir\Google Drive\TimeAnalyzer> sqlite3
+SQLite version 3.33.0 2020-08-14 13:23:32
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> .open users.db
+sqlite> select host, start, end from Events where start >= end;
+ocaml.org|1608768922433|1608768896844
+artofproblemsolving.com|1608769297430|1608769283661
+www.cs.utexas.edu|1608771539584|1608771527513
+www.viemu.com|1608776084712|1608776081755
+beej.us|1608776118943|1608776117255
+www.kfsk.org|1608776179749|1608776157903

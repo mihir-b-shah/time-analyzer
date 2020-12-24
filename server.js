@@ -72,7 +72,7 @@ app.post('/', (req, res) => {
 
         for(let ev of events){
 
-            console.log(JSON.stringify(prevReceived.get(email)) + "\n" + JSON.stringify(prevAccepted.get(email)) + "\n\n");
+            console.log(JSON.stringify(ev));
 
             pred = prevReceived.get(email);
             predAc = prevAccepted.get(email);
@@ -81,7 +81,7 @@ app.post('/', (req, res) => {
 
             // overwrites with different type, should be fine in JS.
             if(restCond && predAc !== undefined){
-                console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
+                // console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
                 db.insert(email, predAc.url, predAc.time, ev.time);
                 prevAccepted.set(email, ev);
             } else if(restCond){
