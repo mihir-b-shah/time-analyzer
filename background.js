@@ -80,6 +80,7 @@ window.onload = (event) => {
                 // finally get the user email.
                 chrome.identity.getProfileUserInfo((info)=>{
                     userEmail = info.email;
+                    recordEvent(0);
                 });
             });
         }
@@ -122,16 +123,6 @@ async function sendEvent(cleanup){
     }
 }
 
-async function serveStats(){
-    const res = await fetch("http://localhost:8080/summary" + new URLSearchParams({'id':userEmail}));
-
-    if(!res.ok){
-        throw new ExtensionError('Recent user event not sent.');
-    }
-
-    return res;
-}
-
 function sendAndClean(){
     sendEvent(()=>{
         eventBuffer = [];
@@ -160,9 +151,10 @@ function endSession(){
 document.addEventListener('DOMContentLoaded', function() {
     let link = document.getElementById('summary');
     link.addEventListener('click', function() {
-        chrome.tabs.create({'url':'http://localhost:8080/summary'}, (res)=>{
-            sendAndClean();
-            serveStats();
+        sendEvent(()=>{
+            eventBuffer = [];
+            chrome.tabs.create({'url':'http://localhost:8080/summary?' 
+                + new URLSearchParams({'id':userEmail})}, (res)=>{});
         });
     });
 });

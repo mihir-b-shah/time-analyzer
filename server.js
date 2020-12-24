@@ -21,6 +21,7 @@ const EventType = Object.freeze({
 let buffer = '';
 
 let prevReceived = new Map();
+let prevAccepted = new Map();
 let db = new database.Database();
 let currResult = null;
 
@@ -33,9 +34,26 @@ function initDB(){
     });
 
     db.on('summary', (rows)=>{
-        // render page.
+
+        function fmtTime(millis){
+            const secs = Math.floor(millis/1000);
+            if(secs >= 60){
+                const minutes = Math.floor(secs/60);
+                if(minutes >= 60){
+                    const hours = Math.floor(minutes/60);
+                    return `${hours} hour(s), ${minutes%60} minute(s), ${secs%60} second(s)`
+                } else {
+                    return `${minutes} minute(s), ${secs%60} second(s)`
+                }
+            } else {
+                return `${secs} second(s)`;
+            }
+        }
+
+        for(let v of rows){
+            v.totalTime = fmtTime(v.totalTime);
+        }
         currResult.render('summary', {webpages:rows});
-        currResult.sendStatus(200);
     });
 }
 
@@ -48,18 +66,30 @@ app.post('/', (req, res) => {
         let packet = JSON.parse(buffer);
         let email = packet.id;
         let events = packet.data;
+
         let pred = null;
+        let predAc = null;
 
         for(let ev of events){
+
+            console.log(JSON.stringify(prevReceived.get(email)) + "\n" + JSON.stringify(prevAccepted.get(email)) + "\n\n");
+
             pred = prevReceived.get(email);
+            predAc = prevAccepted.get(email);
+
+            let restCond = (ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined;
 
             // overwrites with different type, should be fine in JS.
-            if((ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined){
-                console.log(`email: ${email}, url: ${pred.url}, start time: ${pred.time}, end time: ${ev.time}`);
-                db.insert(email, pred.url, pred.time, ev.time);
+            if(restCond && predAc !== undefined){
+                console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
+                db.insert(email, predAc.url, predAc.time, ev.time);
+                prevAccepted.set(email, ev);
+            } else if(restCond){
+                prevAccepted.set(email, ev);
             }
             prevReceived.set(email, ev);
         }
+        console.log('boom!');
         
         buffer = '';
     });

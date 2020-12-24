@@ -1,83 +1,77 @@
-[
-  { type: 1, url: 'https://www.google.com/', time: 1608442998154 },
-  {
-    type: 1,
-    url: 'http://igoro.com/archive/gallery-of-processor-cache-effects/',
-    time: 1608443000697
-  },
-  {
-    type: 1,
-    url: 'file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf',
-    time: 1608443002893
-  },
-  {
-    type: 1,
-    url: 'https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf',
-    time: 1608443004273
-  },
-  { type: 1, url: 'https://godbolt.org/', time: 1608443005634 },
-  {
-    type: 1,
-    url: 'https://wwwext.arlut.utexas.edu/404.shtml',
-    time: 1608443007888
-  },
-  {
-    type: 1,
-    url: 'https://artofproblemsolving.com/wiki/index.php?title=Resources_for_mathematics_competitions',
-    time: 1608443009139
-  },
-  {
-    type: 1,
-    url: 'https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf',
-    time: 1608443009961
-  },
-  { type: 1, url: 'https://godbolt.org/', time: 1608443010979 },
-  {
-    type: 1,
-    url: 'https://playfulprogramming.blogspot.com/2017/01/generate-lambdas-for-clarity-and.html',
-    time: 1608443012924
-  }
-]
-[
-  {
-    type: 1,
-    url: 'file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf',
-    time: 1608443014051
-  },
-  { type: 1, url: 'https://godbolt.org/', time: 1608443014992 },
-  {
-    type: 1,
-    url: 'file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf',
-    time: 1608443017181
-  },
-  {
-    type: 1,
-    url: 'https://github.com/sakimarquis/Mooc',
-    time: 1608443018570
-  },
-  { type: 1, url: 'chrome://extensions/', time: 1608443022603 },
-  { type: 2, url: 'chrome://extensions/', time: 1608443027126 },
-  { type: 3, time: 1608443027197 }
-]
-[
-  {
-    type: 1,
-    url: 'file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf',
-    time: 1608443014051
-  },
-  { type: 1, url: 'https://godbolt.org/', time: 1608443014992 },
-  {
-    type: 1,
-    url: 'file:///C:/Users/Bipin/Downloads/OReilly.Beautiful.Code.Jun.2007.pdf',
-    time: 1608443017181
-  },
-  {
-    type: 1,
-    url: 'https://github.com/sakimarquis/Mooc',
-    time: 1608443018570
-  },
-  { type: 1, url: 'chrome://extensions/', time: 1608443022603 },
-  { type: 2, url: 'chrome://extensions/', time: 1608443027126 },
-  { type: 3, time: 1608443027197 },
-  { type: 3, time: 1608443027231 }
-]
+PS C:\Users\mihir\Google Drive\TimeAnalyzer> node server.js
+Server created Successfully!
+Connected to the user database.
+undefined
+undefined
+
+
+boom!
+{"type":0,"url":null,"time":1608771512988}
+undefined
+
+
+boom!
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771539584}
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771539584}
+
+
+{"type":0,"url":null,"time":1608771526401}
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771539584}
+
+
+email: mihirshah.11204@gmail.com, url: https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/, start time: 1608771539584, end time: 1608771527513
+{"type":1,"url":"https://www.google.com/","time":1608771527513}
+{"type":1,"url":"https://www.google.com/","time":1608771527513}
+
+
+email: mihirshah.11204@gmail.com, url: https://www.google.com/, start time: 1608771527513, end time: 1608771532124
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/#bio","time":1608771532124}
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/#bio","time":1608771532124}
+
+
+email: mihirshah.11204@gmail.com, url: https://www.cs.utexas.edu/~ecprice/#bio, start time: 1608771532124, end time: 1608771536656
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/","time":1608771536656}
+
+
+email: mihirshah.11204@gmail.com, url: https://www.cs.utexas.edu/~ecprice/courses/sublinear/, start time: 1608771536656, end time: 1608771538154
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771538154}
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771538154}
+
+
+{"type":0,"url":null,"time":1608771541210}
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771538154}
+
+
+{"type":2,"url":null,"time":1608771541215}
+{"type":1,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771538154}
+
+
+email: mihirshah.11204@gmail.com, url: https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/, start time: 1608771538154, end time: 1608771541305
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608771541305}
+{"type":1,"url":"http://localhost:8080/summary?id=mihirshah.11204%40gmail.com","time":1608771541305}
+
+
+email: mihirshah.11204@gmail.com, url: http://localhost:8080/summary?id=mihirshah.11204%40gmail.com, start time: 1608771541305, end time: 1608771556096
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771556096}
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771556096}
+
+
+boom!
+{"type":0,"url":null,"time":1608771557783}
+{"type":0,"url":"https://www.cs.utexas.edu/~ecprice/courses/sublinear/fa16/","time":1608771556096}
+
+
+boom!
+PS C:\Users\mihir\Google Drive\TimeAnalyzer> sqlite3       
+SQLite version 3.33.0 2020-08-14 13:23:32
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> select host, start, end from Events where start >= end;
+Error: no such table: Events
+sqlite> .open users.db
+sqlite> select host, start, end from Events where start >= end;
+ocaml.org|1608768922433|1608768896844
+artofproblemsolving.com|1608769297430|1608769283661
+www.cs.utexas.edu|1608771539584|1608771527513
+sqlite> .quit

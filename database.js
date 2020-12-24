@@ -15,51 +15,77 @@ class Database extends evem.EventEmitter {
                 console.log('Connected to the user database.');
             }
         );
+
+        this.opQ = new Map();
+        this.valueWatcher = new evem.EventEmitter()
     }
 
-    padNumber(intg){
-        return intg.toString().padStart(2,'0');
+    incrementOpQ(email){
+        if(this.opQ.has(email)){
+            this.opQ.set(email, 1+this.opQ.get(email));
+        } else {
+            this.opQ.set(email, 1);
+        }
     }
 
-    fmtDate(millis){
-        const date = new Date(millis);
-        return `${date.getFullYear()}${this.padNumber(1+date.getMonth())}${this.padNumber(date.getDate())} `+
-                `${this.padNumber(date.getHours()%12)}:${this.padNumber(date.getMinutes())}:`+
-                `${this.padNumber(date.getSeconds())} ${date.getHours()>=12?'PM':'AM'}`
+    decrementOpQ(email){
+        let v = null;
+        if((v = this.opQ.get(email)) == 1){
+            this.opQ.delete(email);
+        } else {
+            this.opQ.set(email, v-1);
+        }
+    }
+
+    queueEmpty(email){
+        return this.opQ.get(email) == 0;
     }
 
     insert(email, url, start, end){
-        const _email = email.substr(0, Math.min(email.length, this.MaxEmailLength));
-        const _host = url.hostname.substr(0, Math.min(url.hostname.length, this.MaxHostLength));
-        const _url = url.href.substr(0, Math.min(url.href.length, this.MaxURLLength));
+        const _email = email.substr(0, Math.min(email.length, 256));
+        const _host = url.hostname.substr(0, Math.min(url.hostname.length, 128));
+        const _url = url.href.substr(0, Math.min(url.href.length, 512));
 
         const InsertEvent =
             'insert into Events (email, url, host, start, end) '+
-            `values ('${_email}', '${_url}', '${_host}', '${this.fmtDate(start)}', '${this.fmtDate(end)}');`
+            `values ('${_email}', '${_url}', '${_host}', '${start}', '${end}');`
 
+        this.incrementOpQ(email);
         this.db.run(InsertEvent, (err)=>{
             if(err !== null){
-                this.emit('error', 'insert');
+                this.emit('error', err.message);
             } else {
                 this.emit('insert');
             }
+            this.decrementOpQ(email);
+            this.valueWatcher.emit('finished');
         });
     }
 
-    getUserSummary(email){
+    unsyncUserSummary(email){
         const GetUserData = 
-            'select host as hostname, sum(time) as totalTime from Events '+
-            `where email = ${email} `+
+            'select host as hostname, sum(end-start) as totalTime from Events '+
+            `where email = '${email}' `+
             'group by host '+
             'order by totalTime desc;';
 
         this.db.all(GetUserData, (err, rows) => {
             if(err !== null){
-                this.emit('error', 'select');
+                this.emit('error', err.message);
             } else {
                 this.emit('summary', rows);
             }
         });
+    }
+
+    async getUserSummary(email){
+        if(this.queueEmpty(email)){
+            this.valueWatcher.on('finished', ()=>{
+                this.unsyncUserSummary(email);
+            });
+        } else {
+            this.unsyncUserSummary(email);
+        }
     }
 
     release(){
