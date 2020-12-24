@@ -21,8 +21,7 @@ let userEmail = null;
 const CallerType = Object.freeze({
     ACTIVATE : 0,
     UPDATE   : 1,
-    FOCUS    : 2,
-    SENTINEL : 3
+    FOCUS    : 2
 });
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
@@ -41,6 +40,7 @@ class ExtensionError extends Error {
 class UserEvent {
     constructor(type){
         this.type = type;
+        this.wasted = false;
         
         let tabIdRes = null;
         let tabRes = null;
@@ -56,6 +56,13 @@ class UserEvent {
 };
 
 /* --------------------- initializers -------------------------- */
+
+async function stillHere(){
+    const res = await fetch('http://localhost:8080?'+ new URLSearchParams(
+        {'id':userEmail}), {method: "HEAD"});
+}
+
+setInterval(stillHere, 1000);
 
 /* this is dangerous, possibly causes race condition */
 window.onload = (event) => {
@@ -118,14 +125,11 @@ async function sendEvent(cleanup, ev){
     }
 }
 
-
 function recordEvent(callerType){    
     sendEvent(()=>{}, new UserEvent(callerType));
 }
 
 function endSession(){
-    sendEvent(()=>{}, new UserEvent(CallerType.SENTINEL));
-    
     // reset everything in case.
     activeTabs = new Map();
     tabIds = new Map();
@@ -135,12 +139,14 @@ function endSession(){
 /* ------------------------ DOM -------------------------------- */
 
 document.addEventListener('DOMContentLoaded', function() {
-    let link = document.getElementById('summary');
-    link.addEventListener('click', function() {
-        sendEvent(()=>{
-            chrome.tabs.create({'url':'http://localhost:8080/summary?' 
+    document.getElementById('summary').addEventListener('click', function() {
+        chrome.tabs.create({'url':'http://localhost:8080/summary?' 
                 + new URLSearchParams({'id':userEmail})}, (res)=>{});
-        });
+    });
+
+    document.getElementById('markBad').addEventListener('click', async function() {
+        const res = await fetch('http://localhost:8080/noteWasted?'+ new URLSearchParams(
+            {'id':userEmail}), {method: "HEAD"});
     });
 });
 
@@ -222,7 +228,6 @@ chrome.windows.onRemoved.addListener(
             topWindowId = null;
         }
         if(activeTabs.size == 0){
-            log('ending.');
             endSession();
         }
     }

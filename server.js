@@ -10,16 +10,8 @@ const ejs = require('ejs');
 const port = 8080;
 const app = express();
 
-// js excuse for an enum
-const EventType = Object.freeze({
-    ACTIVATE : 0,
-    UPDATE   : 1,
-    FOCUS    : 2,
-    SENTINEL : 3
-}); 
-
 let buffer = '';
-
+let prevTime = new Map();
 let prevReceived = new Map();
 let prevAccepted = new Map();
 let db = new database.Database();
@@ -57,45 +49,79 @@ function initDB(){
     });
 }
 
-app.post('/', (req, res) => {
-    req.on('data', (data) => {
-        buffer += data.toString();
-    });
+const HTTP_REQ_LATENCY_SECS = 1;
+const SECS_PER_PING = 1;
+const SWEEP_CHECK_FREQ = 1;
 
-    req.on('end', () => {
-        let packet = JSON.parse(buffer);
-        let email = packet.id;
-        let ev = packet.data;
-
-        let pred = prevReceived.get(email);
-        let predAc = prevAccepted.get(email);
-        console.log(JSON.stringify(ev));
-
-        let restCond = (ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined;
-
-        // overwrites with different type, should be fine in JS.
-        if(restCond && predAc !== undefined){
-            // console.log(`email: ${email}, url: ${predAc.url}, start time: ${predAc.time}, end time: ${ev.time}`);
-            db.insert(email, predAc.url, predAc.time, ev.time);
-            prevAccepted.set(email, ev);
-        } else if(restCond){
-            prevAccepted.set(email, ev);
+setInterval(()=>{
+    const curr = Date.now();
+    for (const [email, time] of prevTime) {
+        if(curr-time >= 1000*(SECS_PER_PING+HTTP_REQ_LATENCY_SECS)){
+            let predAc = prevAccepted.get(email);
+            db.insert(email, predAc.url, predAc.wasted, predAc.time, curr);
+            console.log(JSON.stringify({"type":3, "url":null, "time":curr}));
+            prevTime.delete(email);
         }
-        prevReceived.set(email, ev);
+    }
+}, 1000*SWEEP_CHECK_FREQ);
 
-        console.log('boom!');
+app.route('/')
+    .post((req, res) => {
+        req.on('data', (data) => {
+            buffer += data.toString();
+        });
+
+        req.on('end', () => {
+            let packet = JSON.parse(buffer);
+            let email = packet.id;
+            let ev = packet.data;
+
+            let pred = prevReceived.get(email);
+            let predAc = prevAccepted.get(email);
+
+            console.log(JSON.stringify(ev));
+
+            // overwrites with different type, should be fine in JS.
+            let restCond = (ev.url = evFilt.isProperEvent(ev, pred)) != null && pred !== undefined;
+            
+            if(restCond && predAc !== undefined){
+                db.insert(email, predAc.url, predAc.wasted, predAc.time, ev.time);
+                prevAccepted.set(email, ev);
+            } else if(restCond){
+                prevAccepted.set(email, ev);
+            }
+            prevReceived.set(email, ev);
+
+            buffer = '';
+        });
         
-        buffer = '';
-    });
-    
-    res.sendStatus(200);
-});
+        res.sendStatus(200);
+    })
 
-app.get('/summary', (req, res) => {
-    let email = req.query.id;
-    currResult = res;
-    db.getUserSummary(email);
-});
+    .head((req, res) => {
+        let email = req.query.id;
+        prevTime.set(email, Date.now());
+        res.sendStatus(200);
+    });
+
+app.route('/summary')
+    .get((req, res) => {
+        let email = req.query.id;
+        currResult = res;
+        db.getUserSummary(email);
+    });
+
+app.route('/noteWasted')
+    .head((req, res) => {
+        let email = req.query.id;
+        let pred = prevAccepted.get(email);
+
+        if(pred !== undefined){
+            pred.wasted = true;
+        }
+
+        res.sendStatus(200);
+    });
 
 initDB();
 

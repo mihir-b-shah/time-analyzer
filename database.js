@@ -41,14 +41,14 @@ class Database extends evem.EventEmitter {
         return this.opQ.get(email) == 0;
     }
 
-    insert(email, url, start, end){
+    insert(email, url, wasted, start, end){
         const _email = email.substr(0, Math.min(email.length, 256));
         const _host = url.hostname.substr(0, Math.min(url.hostname.length, 128));
         const _url = url.href.substr(0, Math.min(url.href.length, 512));
 
         const InsertEvent =
-            'insert into Events (email, url, host, start, end) '+
-            `values ('${_email}', '${_url}', '${_host}', '${start}', '${end}');`
+            'insert into Events (email, url, host, wasted, start, end) '+
+            `values ('${_email}', '${_url}', '${_host}', '${wasted}', '${start}', '${end}');`
 
         this.incrementOpQ(email);
         this.db.run(InsertEvent, (err)=>{
