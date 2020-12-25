@@ -58,8 +58,10 @@ setInterval(()=>{
     for (const [email, time] of prevTime) {
         if(curr-time >= 1000*(SECS_PER_PING+HTTP_REQ_LATENCY_SECS)){
             let predAc = prevAccepted.get(email);
-            db.insert(email, predAc.url, predAc.wasted, predAc.time, curr);
-            console.log(JSON.stringify({"type":3, "url":null, "time":curr}));
+            if(predAc !== undefined){
+                db.insert(email, predAc.url, predAc.wasted, predAc.time, curr);
+                console.log(JSON.stringify({"type":3, "url":null, "time":curr}));
+            }
             prevTime.delete(email);
         }
     }
