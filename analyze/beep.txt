@@ -1,0 +1,192 @@
+==================================================
+URL               : https://github.com/artiz/word2vec-win32
+Title             : artiz/word2vec-win32: A word2vec port for Windows.
+Visit Time        : 12/22/2020 12:13:01 AM
+Visit Count       : 3
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 39
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 109825
+==================================================
+
+==================================================
+URL               : https://github.com/artiz/word2vec-win32
+Title             : artiz/word2vec-win32: A word2vec port for Windows.
+Visit Time        : 12/22/2020 12:13:05 AM
+Visit Count       : 3
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 39
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 109828
+==================================================
+
+==================================================
+URL               : https://github.com/artiz/word2vec-win32/blob/master/compute-accuracy.c
+Title             : word2vec-win32/compute-accuracy.c at master · artiz/word2vec-win32
+Visit Time        : 12/22/2020 12:13:01 AM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 70
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 109826
+==================================================
+
+==================================================
+URL               : https://github.com/artiz/word2vec-win32/blob/master/compute-accuracy.c
+Title             : word2vec-win32/compute-accuracy.c at master · artiz/word2vec-win32
+Visit Time        : 12/22/2020 12:13:02 AM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 70
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 109827
+==================================================
+
+==================================================
+URL               : https://github.com/atilaneves/cmake-ide
+Title             : atilaneves/cmake-ide: Use Emacs as a C/C++ IDE
+Visit Time        : 12/26/2020 6:37:02 PM
+Visit Count       : 1
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 39
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 112662
+==================================================
+
+==================================================
+URL               : https://github.com/autozimu/LanguageClient-neovim/wiki/Clangd
+Title             : Clangd · autozimu/LanguageClient-neovim Wiki
+Visit Time        : 10/22/2020 12:10:46 AM
+Visit Count       : 1
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 61
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 55509
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger
+Title             : billstclair/truledger: A digitally-signed accounting and trading system
+Visit Time        : 12/27/2020 12:34:28 PM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 40
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113201
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger
+Title             : billstclair/truledger: A digitally-signed accounting and trading system
+Visit Time        : 12/27/2020 12:34:26 PM
+Visit Count       : 2
+Visited From      : https://github.com/search?l=&p=3&q=language%3A%22Common+Lisp%22&ref=advsearch&type=Repositories
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 40
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113200
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger/blob/master/src/history.lisp
+Title             : truledger/history.lisp at master · billstclair/truledger
+Visit Time        : 12/27/2020 12:34:31 PM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 69
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113204
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger/blob/master/src/history.lisp
+Title             : truledger/history.lisp at master · billstclair/truledger
+Visit Time        : 12/27/2020 12:34:31 PM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 69
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113205
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger/tree/master/src
+Title             : truledger/src at master · billstclair/truledger
+Visit Time        : 12/27/2020 12:34:28 PM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 56
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113203
+==================================================
+
+==================================================
+URL               : https://github.com/billstclair/truledger/tree/master/src
+Title             : truledger/src at master · billstclair/truledger
+Visit Time        : 12/27/2020 12:34:28 PM
+Visit Count       : 2
+Visited From      : 
+Visit Type        : 
+Web Browser       : Edge (Chromium-based)
+User Profile      : mihir
+Browser Profile   : Default
+URL Length        : 56
+Typed Count       : 
+History File      : C:\Users\mihir\AppData\Local\Microsoft\Edge\User Data\Default\History
+Record ID         : 113202
+==================================================
+
