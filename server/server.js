@@ -125,6 +125,18 @@ app.route('/noteWasted')
         res.sendStatus(200);
     });
 
+app.route('/noteFine')
+    .head((req, res) => {
+        let email = req.query.id;
+        let pred = prevAccepted.get(email);
+
+        if(pred !== undefined){
+            pred.wasted = false;
+        }
+
+        res.sendStatus(200);
+    });
+
 initDB();
 
 app.set('views', __dirname);

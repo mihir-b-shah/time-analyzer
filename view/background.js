@@ -148,6 +148,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const res = await fetch('http://localhost:8080/noteWasted?'+ new URLSearchParams(
             {'id':userEmail}), {method: "HEAD"});
     });
+
+    document.getElementById('markGood').addEventListener('click', async function() {
+        const res = await fetch('http://localhost:8080/noteFine?'+ new URLSearchParams(
+            {'id':userEmail}), {method: "HEAD"});
+    });
 });
 
 /* ------------------- tracking callbacks----------------------- */

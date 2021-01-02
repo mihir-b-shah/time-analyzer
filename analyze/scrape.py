@@ -11,6 +11,7 @@ def _get_html(url):
 
 def _get_text(html):
     soup = BeautifulSoup(html, 'html.parser')
-    return re.sub('[\\W&&\\S]+', '', re.sub('\\s+', ' ', soup.get_text()))
+    return re.sub(r'[^\\,\\.A-Za-z ]+', '', re.sub(r'\\s+', ' ', soup.get_text()))
 
-print(compose([_get_text, _get_html], 'http://mudhaniu.x10host.com'))
+def get_text(url):
+    return compose([_get_text, _get_html], url)

@@ -1,1 +1,5 @@
 users.db
+TimeAnalyzer.crx
+TimeAnalyzer.pem
+.vscode/*
+__pycache__/*
