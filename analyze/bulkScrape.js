@@ -14,7 +14,6 @@ let docs = [];
 let processed = undefined;
 let docCtr = 0;
 
-// parse out headers !!
 async function getHTML(url){
     // console.log(url);
     fetch(url)
@@ -22,7 +21,7 @@ async function getHTML(url){
             if(!res.ok){
                 throw res;
             } else {
-                return res.headers;
+                return res.text();
             }
         })
         .then((res)=>{
@@ -32,7 +31,7 @@ async function getHTML(url){
         })
         .finally(()=>{
             --processed;
-            if(docs.length === DOC_BUFFER_SIZE){
+            if(docs.length === DOC_BUFFER_SIZE || processed === 0){
                 fs.writeFile(`../../../data/pages${++docCtr}.txt`, JSON.stringify(docs), (err)=>{
                     if(err !== null){
                         console.error('error in writing data file.');
