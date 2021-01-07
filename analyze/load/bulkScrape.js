@@ -32,7 +32,7 @@ async function getHTML(url){
         .finally(()=>{
             --processed;
             if(docs.length === DOC_BUFFER_SIZE || processed === 0){
-                fs.writeFile(`../../../data/pages${++docCtr}.txt`, JSON.stringify(docs), (err)=>{
+                fs.writeFile(`../../../../data/docs/pages${++docCtr}.txt`, JSON.stringify(docs), (err)=>{
                     if(err !== null){
                         console.error('error in writing data file.');
                     }
@@ -44,7 +44,7 @@ async function getHTML(url){
 
 function run(){
     try {
-        const data = fs.readFileSync('../../../data/data.txt', 'utf-16le');
+        const data = fs.readFileSync('../../../../data/data.txt', 'utf-16le');
         const lines = data.split(/\r?\n/);
 
         let ctr = 0;

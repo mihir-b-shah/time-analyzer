@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 
 def get_data(email):
-    conn = sqlite3.connect('../users.db')
+    conn = sqlite3.connect('../../users.db')
 
     # if even once it is marked as wasted, we keep it as so. 
     query = '''select url, max(wasted) as wasted

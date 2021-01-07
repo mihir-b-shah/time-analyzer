@@ -1,0 +1,41 @@
+-------------------------------------------------------------------------------
+Preprocessing:
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Feature Vector generation:
+-------------------------------------------------------------------------------
+
+1. TF-IDF + Average across top k words of GloVe feature vectors.
+
+2. Autoencoder NN- 
+
+3. 
+
+-------------------------------------------------------------------------------
+Auto-labeling:
+-------------------------------------------------------------------------------
+
+- Active learning approach - tell user what to label
+https://en.wikipedia.org/wiki/Active_learning_(machine_learning)
+
+- Good ideas:
+1. Query by committee- train k models on the labeled data, have them predict on
+unlabeled data, and see which samples they disagree the most on
+
+2. PCA + Clustering- project onto a lower-dimensional space and then use Gaussian
+mixtures to determine which datapoints most straddle two different clusters
+
+3. SVM (not necessarily linear)- figure out what vectors are closest to the hyperplane,
+and verify those labels.
+
+4. Autoencoders
+
+-------------------------------------------------------------------------------
+Model:
+-------------------------------------------------------------------------------
+
+Shallow neural net:
+- 1 hidden layer to aggregate topics.
+- output layer just has one node.
+
