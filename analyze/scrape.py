@@ -2,7 +2,6 @@
 import db_interface
 import requests
 from bs4 import BeautifulSoup
-from utils import *
 import re
 
 def get_html(url):

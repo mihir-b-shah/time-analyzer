@@ -1,5 +1,5 @@
 
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from iterate_docs import DocIterator
 from array import *
 import collections as colc
@@ -34,35 +34,35 @@ class StreamTFIDF:
     def __init__(self):
         self.term_map = dict()
         self.tdm = GrowableSparseMatrix(0)
-        self.idv = array()
+        self.idv = array('I') # unsigned array
 
-    def _tokenize(doc):
+    def _tokenize(self, doc):
         return doc.split(' ')
 
-    def _new_word(word):
-        size = len(term_map)
-        term_map[word] = size
+    def _new_word(self, word):
+        size = len(self.term_map)
+        self.term_map[word] = size
 
         # setup for idf
-        idv.append(0)
+        self.idv.append(0)
 
         return size
 
-    def _normalize(row, doc_len):
-        for k in d:
-            d[k] /= doc_len
+    def _normalize(self, row, doc_len):
+        for k in row:
+            row[k] /= doc_len
 
     def add_docs(self, docs):
-        doc_alias = len(self.dtm)
+        doc_alias = len(self.tdm)
 
         self.tdm.add_row(len(docs))
         for doc in docs:
-            word_list = _tokenize(doc)
+            word_list = self._tokenize(doc)
             num_words = len(word_list)
             toks = colc.Counter(word_list)
 
-            for (tok, count) in toks:
-                tok_alias = self.term_map[tok] if (tok in self.term_map) else _new_word(tok)
+            for (tok, count) in toks.items():
+                tok_alias = self.term_map[tok] if (tok in self.term_map) else self._new_word(tok)
 
                 # update tf
                 self.tdm[doc_alias, tok_alias] = count
@@ -71,7 +71,7 @@ class StreamTFIDF:
                 self.idv[tok_alias] += 1
             
             # normalize term frequencies.
-            _normalize(get_row(doc_alias), num_words)
+            self._normalize(self.tdm.get_row(doc_alias), num_words)
 
             doc_alias += 1
 
@@ -83,5 +83,10 @@ class StreamTFIDF:
 # returns a sparse matrix.
 def get_tf():
     docs = [doc for doc in DocIterator()]
-    cv = CountVectorizer()
+    cv = TfidfVectorizer()
     return cv.fit_transform(docs)
+
+docs = [doc for doc in DocIterator()]
+st = StreamTFIDF()
+for doc in docs:
+    st.add_docs([doc])

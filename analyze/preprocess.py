@@ -9,4 +9,6 @@ def process(nlp, doc):
     data = nlp(doc)
     return data
 
-process(init(), "the quick brown fox jumped over the lazy dog.")
+doc = process(init(), "the quick brown fox jumped over the lazy dog.")
+for token in doc:
+    print(token.text, token.pos_, token.dep_)
