@@ -13,6 +13,7 @@ Performs the following operations.
 3. Remove all bad characters
 4. Stop word removal
 5. Out of vocab removal
+6. Words of length 1 or 2 characters.
 ----------------------------------------
 6. Stemming (too inaccurate)
 7. Coreference (nice but too expensive)
@@ -22,6 +23,7 @@ Performs the following operations.
 vocab = glove_model.get_w2v_model().wv.vocab
 NonAlphRegex = re.compile(r'\.|[A-Za-z]+')
 LiteralEscapeRegex = re.compile('\\r|\\n|\\t')
+MinWordLength = 3
 
 def remove_escape_chars(sstr):
     return re.sub(LiteralEscapeRegex, '', sstr)
@@ -44,6 +46,9 @@ def stop_word_removal(tok_stream):
 def oov_removal(tok_stream):
     return filter(lambda tok : tok in vocab, tok_stream)
 
+def small_word_removal(tok_stream):
+    return filter(lambda tok : len(tok) >= MinWordLength, tok_stream)
+
 def clean(doc):
     return ' '.join(list(utils.compose([
         remove_escape_chars,
@@ -51,5 +56,6 @@ def clean(doc):
         expand_contractions,
         non_alph_removal,
         stop_word_removal,
-        oov_removal
+        oov_removal,
+        small_word_removal
     ], doc)))

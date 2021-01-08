@@ -11,4 +11,4 @@ def process(nlp, doc):
 
 doc = process(init(), "the quick brown fox jumped over the lazy dog.")
 for token in doc:
-    print(token.text, token.pos_, token.dep_)
+    print(token.text, token.lemma_, token.dep_)

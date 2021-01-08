@@ -12,7 +12,7 @@ def get_text(html):
     for item in (soup.select('script') + soup.select('style')):
         item.decompose()
         
-    return soup.get_text()
+    return clean_text.clean(soup.get_text())
 
 def get_docs(file_num):
     jsn = json.load(open('../../../data/pages/pages%d.txt'%(file_num), "r", errors="ignore"))

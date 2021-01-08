@@ -4,6 +4,7 @@ from iterate_docs import DocIterator
 from array import *
 import collections as colc
 import math
+from functools import cmp_to_key
 
 # simpler not to subclass
 class GrowableSparseMatrix:
@@ -30,9 +31,10 @@ class GrowableSparseMatrix:
     def __len__(self):
         return len(self.mat)
 
-class StreamTFIDF:
+class TFIDFStreamer:
     def __init__(self):
         self.term_map = dict()
+        self.rev_term_map = []
         self.tdm = GrowableSparseMatrix(0)
         self.idv = array('I') # unsigned array
 
@@ -42,6 +44,7 @@ class StreamTFIDF:
     def _new_word(self, word):
         size = len(self.term_map)
         self.term_map[word] = size
+        self.rev_term_map.append(word)
 
         # setup for idf
         self.idv.append(0)
@@ -62,6 +65,9 @@ class StreamTFIDF:
             toks = colc.Counter(word_list)
 
             for (tok, count) in toks.items():
+                if(len(tok) < 3):
+                    continue
+
                 tok_alias = self.term_map[tok] if (tok in self.term_map) else self._new_word(tok)
 
                 # update tf
@@ -80,13 +86,17 @@ class StreamTFIDF:
         term_alias = self.term_map[term]
         return self.tdm[doc, term_alias]*math.log(len(self.tdm)/self.idv[term_alias])
 
-# returns a sparse matrix.
-def get_tf():
-    docs = [doc for doc in DocIterator()]
-    cv = TfidfVectorizer()
-    return cv.fit_transform(docs)
+    def get_most_freq(self, doc, k, skip=0, Insert=False):
+        doc_alias = None
+        if(Insert):
+            add_docs([doc])
+            doc_alias = len(self.dtm)-1
+        else:
+            doc_alias = doc
 
-docs = [doc for doc in DocIterator()]
-st = StreamTFIDF()
-for doc in docs:
-    st.add_docs([doc])
+        row_cts = self.tdm.get_row(doc_alias)
+        words = [(word := self.rev_term_map[idx], self.score(word, doc_alias)) for (idx, tf) in row_cts.items()]
+
+        # sort in reverse order
+        words = sorted(words, key=cmp_to_key(lambda p1,p2 : p2[1]-p1[1]))
+        return words[skip: k+skip]
