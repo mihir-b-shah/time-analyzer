@@ -6,6 +6,7 @@ import collections as colc
 import math
 from functools import cmp_to_key
 import numpy as np
+import gensim_model
 
 # simpler not to subclass
 class GrowableSparseMatrix:
@@ -102,8 +103,8 @@ class TFIDFStreamer:
         words = sorted(words, key=cmp_to_key(lambda p1,p2 : p2[1]-p1[1]))
         return words[skip: k+skip]
 
-    def get_vector(k, doc_alias, model):
-        pairs = get_most_freq(doc_alias, k)
+    def get_vector(self, k, doc_alias, model):
+        pairs = self.get_most_freq(doc_alias, k)
         vect = np.zeros(gensim_model.w2v_vect_length())
         for pair in pairs:
             vect += model[pair[0]]*pair[1]
