@@ -14,9 +14,8 @@ class DocIterator:
         self.doc_iter = self._read_file(self.file_iter.__next__().path).__iter__()
 
     def __init__(self):
-        self.file_iter = os.scandir('../../../data/docs').__iter__()
+        self.file_iter = sorted(os.scandir('../../../data/docs'), key=lambda entry : entry.name).__iter__()
         self.doc_iter = None
-
         self.file_ctr = 0
 
     def __iter__(self):
@@ -28,3 +27,6 @@ class DocIterator:
         except:
             self._next_file()
             return self.doc_iter.__next__()
+
+def get_docs():
+    return [doc for doc in DocIterator()]

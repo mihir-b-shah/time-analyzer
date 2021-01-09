@@ -5,6 +5,7 @@ from array import *
 import collections as colc
 import math
 from functools import cmp_to_key
+import numpy as np
 
 # simpler not to subclass
 class GrowableSparseMatrix:
@@ -100,3 +101,10 @@ class TFIDFStreamer:
         # sort in reverse order
         words = sorted(words, key=cmp_to_key(lambda p1,p2 : p2[1]-p1[1]))
         return words[skip: k+skip]
+
+    def get_vector(k, doc_alias, model):
+        pairs = get_most_freq(doc_alias, k)
+        vect = np.zeros(gensim_model.w2v_vect_length())
+        for pair in pairs:
+            vect += model[pair[0]]*pair[1]
+        return vect

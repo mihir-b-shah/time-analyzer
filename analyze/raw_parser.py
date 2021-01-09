@@ -28,4 +28,4 @@ def persist():
         with open('../../../data/docs/docs%d.data'%(file_num), 'wb') as out_file:
             pickle.dump(get_docs(file_num), out_file)
 
-persist()
+# persist()

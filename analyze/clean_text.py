@@ -2,7 +2,7 @@
 import contractions
 import utils
 import re
-import glove_model
+import gensim_model
 from gensim.parsing.preprocessing import STOPWORDS
 
 '''
