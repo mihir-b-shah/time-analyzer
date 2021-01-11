@@ -8,7 +8,7 @@ class Database extends evem.EventEmitter {
 
     constructor(){
         super();
-        this.db = new sqlite.Database('users.db', (err) => {
+        this.db = new sqlite.Database('../users.db', (err) => {
             if (err) {
                 console.error(err.message);
             }

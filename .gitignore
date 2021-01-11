@@ -1,5 +1,6 @@
-users.db
+server/users.db
 TimeAnalyzer.crx
 TimeAnalyzer.pem
+design.txt
 .vscode/*
-__pycache__/*
+users.db
