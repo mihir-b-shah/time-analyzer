@@ -144,15 +144,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 + new URLSearchParams({'id':userEmail})}, (res)=>{});
     });
 
-    document.getElementById('markBad').addEventListener('click', async function() {
-        const res = await fetch('http://localhost:8080/noteWasted?'+ new URLSearchParams(
-            {'id':userEmail}), {method: "HEAD"});
+    document.getElementById('label').addEventListener('click', function() {
+        chrome.tabs.create({'url':'http://localhost:5050/labeling?' 
+                + new URLSearchParams({'id':userEmail})}, (res)=>{});
     });
+});
 
-    document.getElementById('markGood').addEventListener('click', async function() {
-        const res = await fetch('http://localhost:8080/noteFine?'+ new URLSearchParams(
-            {'id':userEmail}), {method: "HEAD"});
-    });
+/* ------------------- blocker --------------------------------- */
+
+function modifyDOM() {
+    return document.documentElement.innerText;
+}
+
+const BlockPageCode = 'BLOCK';
+
+//We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
+chrome.history.onVisited.addListener((historyItem) => {
+    if(historyItem.url !== undefined && historyItem.url.startsWith('http')){
+        chrome.tabs.executeScript({
+            code: '(' + modifyDOM.toString() + ')();'
+        }, (text) => {
+            fetch("http://localhost:5050/decide", { 
+                method: "POST",
+                
+                body: JSON.stringify({'id':userEmail, 'data':text}), 
+
+                headers: { 
+                    "Content-type": "application/json; charset=UTF-8"
+                } 
+            }).then((res) => {
+                res.text()
+                    .then((txt) => {
+                        if(txt === BlockPageCode){
+                            chrome.tabs.update({'url': 'blocked.html'})
+                        }
+                    }).catch((err) => {});
+            }).catch((err) => {});
+        });
+    }
 });
 
 /* ------------------- tracking callbacks----------------------- */

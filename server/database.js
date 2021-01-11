@@ -8,13 +8,12 @@ class Database extends evem.EventEmitter {
 
     constructor(){
         super();
-        this.db = new sqlite.Database('../users.db', (err) => {
-                if (err) {
-                    console.error(err.message);
-                }
-                console.log('Connected to the user database.');
+        this.db = new sqlite.Database('users.db', (err) => {
+            if (err) {
+                console.error(err.message);
             }
-        );
+            console.log('Connected to the user database.');
+        });
 
         this.opQ = new Map();
         this.valueWatcher = new evem.EventEmitter()
@@ -53,7 +52,8 @@ class Database extends evem.EventEmitter {
         this.incrementOpQ(email);
         this.db.run(InsertEvent, (err)=>{
             if(err !== null){
-                this.emit('error', err.message);
+
+                this.emit('error', err.message + 'prob in insert occurred.');
             } else {
                 this.emit('insert');
             }
