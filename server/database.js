@@ -6,9 +6,10 @@ const evem = require('events');
 
 class Database extends evem.EventEmitter {
 
+    // make sure this is called from the server directory.
     constructor(){
         super();
-        this.db = new sqlite.Database('../users.db', (err) => {
+        this.db = new sqlite.Database('./users.db', (err) => {
             if (err) {
                 console.error(err.message);
             }
@@ -52,7 +53,6 @@ class Database extends evem.EventEmitter {
         this.incrementOpQ(email);
         this.db.run(InsertEvent, (err)=>{
             if(err !== null){
-
                 this.emit('error', err.message + 'prob in insert occurred.');
             } else {
                 this.emit('insert');
