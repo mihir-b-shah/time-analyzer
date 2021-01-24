@@ -37,9 +37,8 @@ def _get_d2v_vector(doc_alias, docs, model):
 def normalized_dot(v1, v2):
     return np.dot(v1, v2)/np.sqrt(np.linalg.norm(v1)*np.linalg.norm(v2))
 
-def run_test(s,e):
-    docs = iterate_docs.get_docs()[s:e]
-
+def run_test():
+    docs = iterate_docs.get_docs()[0:100]
     tfidf_model = _build_tfidf_model(docs)
     lda_model = _build_lda_model(docs)
     d2v_model = _build_d2v()
@@ -78,4 +77,4 @@ def run_test(s,e):
     print('LDA mean squared error: ' + str(lda_mse))
     print('Doc2Vec mean squared error: ' + str(d2v_mse))
 
-print('Time taken: ' + str(timeit.timeit(lambda: run_test(0,500), number=1)))
+print('Time taken: ' + str(timeit.timeit(lambda: run_test(), number=1)))

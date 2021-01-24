@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import iterate_docs
 
 def build_model(k):
-    return LatentDirichletAllocation(n_components=k)
+    return LatentDirichletAllocation(n_components=k, learning_method='online')
 
 # returns feature vectors for documents
 def update_full_and_extract(model, docs):

@@ -1,6 +1,6 @@
 server/users.db
 TimeAnalyzer.crx
 TimeAnalyzer.pem
-design.txt
+design/*
 .vscode/*
 users.db
