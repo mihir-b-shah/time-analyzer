@@ -4,3 +4,4 @@ TimeAnalyzer.pem
 design/*
 .vscode/*
 users.db
+analyze/models/*

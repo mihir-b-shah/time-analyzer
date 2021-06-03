@@ -1,0 +1,39 @@
+
+ml_server.py:
+- takes a Model as input
+
+model.py
+1. process_labels(...)
+2. list_to_label()
+3. insert_and_decide(...)
+4. update_topics(...)
+
+A. How is process_labels(...) implemented?
+
+B. How is list_to_label(...) implemented? 
+
+C. How is insert_and_decide(...) implemented?
+
+  --------------------------------------------------------------------------------
+  Decision pipeline:
+  <html> -> <Preprocessed text> -> <Feature vector> -> <prediction>
+
+  Candidate 1: Traditional 
+ 
+    1. <html> -> <preprocessed text> (done by clean_html() in clean_text.py)
+    2. <preprocessed_text> -> <feature_vector> (done by get_feature_vector in feature_extract.py)- doc2vec
+    3. <feature_vector> -> <prediction>- shallow neural net  (1 layer to simulate topics)
+
+  Candidate 2: Entities only
+    
+    1. <html> -> <list of strings> (done by find_entities() in find_entities.py) 
+    2. <list of strings> -> <feature_vector> (done by word2vec on entities + some averaging)
+    3. <feature_vector> -> <prediction> - dimred (autoencoder/PCA) + simple alg (knn/random forest)
+
+  Candidate 3: Without ML
+
+    1. just check html's underlying text for any tokens in topics
+
+  --------------------------------------------------------------------------------
+
+  Then, take the url -> feature_vector mapping and insert it into the model's storage.

@@ -8,7 +8,7 @@ import numpy as np
 import timeit
 
 def _get_test_set(fname):
-    with open('../../../data/test/%s.csv'%(fname), 'r') as csvfile:
+    with open('../../data/test/%s.csv'%(fname), 'r') as csvfile:
         reader = csv.reader(csvfile)
         return [row for row in reader]
 

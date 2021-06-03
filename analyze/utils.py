@@ -1,5 +1,6 @@
 
 from itertools import chain
+import os
 
 def compose(funcs, arg):
     result = arg
@@ -9,3 +10,6 @@ def compose(funcs, arg):
 
 def flatmap(f, items):
     return chain.from_iterable(map(f, items))
+
+def get_path(path):
+  return os.path.abspath(path)
