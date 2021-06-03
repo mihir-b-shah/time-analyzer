@@ -5,3 +5,4 @@ design/*
 .vscode/*
 users.db
 analyze/models/*
+analyze/log.txt
