@@ -28,6 +28,10 @@ class Model(ABC):
   def update_topics(self, topics):
     pass
 
+  @abstractmethod
+  def save(self, path):
+    pass
+
 class UselessModel(Model):
 
   def __init__(self):
@@ -43,6 +47,9 @@ class UselessModel(Model):
     pass
   
   def update_topics(self, topics):
+    pass
+   
+  def save(self, path):
     pass
 
 class VotingModel(Model):
@@ -65,4 +72,5 @@ class VotingModel(Model):
   def update_topics(self, topics):
     pass
 
-  
+  def save(self, path):
+    self.model.save(path)
