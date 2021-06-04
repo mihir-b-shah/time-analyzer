@@ -4,6 +4,7 @@ import voter
 import preprocess
 import extract
 import predict
+import os
 
 class Model(ABC):
 
@@ -54,15 +55,16 @@ class UselessModel(Model):
 
 class VotingModel(Model):
 
-  def __init__(self):
-    self.model = voter.Voter(Pipeline(preprocess.make('clean'), extract.make('d2v'), predict.make('shallow-nn')),
-                             Pipeline(preprocess.make('entity'), extract.make('w2v-avg'), predict.make('rand-forest')),
-                             0.5)
+  def __init__(self, Threshold=0.5):
+    self.models = [
+      Pipeline(preprocess.make('clean'), extract.make('d2v'), predict.make('shallow-nn')),
+      Pipeline(preprocess.make('entity'), extract.make('w2v-avg'), predict.make('rand-forest'))
+    ]
+    self.voter = Voter(models, Threshold)
 
   def insert_and_decide(self, email, txt):
     ret = self.model.predict(txt)
     
-
   def list_to_label(self):
     return []
 
@@ -73,4 +75,5 @@ class VotingModel(Model):
     pass
 
   def save(self, path):
-    self.model.save(path)
+    for model in self.models:
+      model.save(os.path.join(path, model.name()))

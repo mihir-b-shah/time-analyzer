@@ -3,6 +3,14 @@ from abc import ABC, abstractmethod
 import d2v_model
 import w2v_model
 
+'''
+Note a much more efficient apporach:
+run the pipeline up to this point in the browser.
+w2v and d2v would have to be embedded in the browser.
+then send the feature vector down.
+
+'''
+
 class FeatureExtractor(ABC):
   @classmethod
   def make(cls, name):
