@@ -3,14 +3,23 @@ from abc import ABC, abstractmethod
 import tensorflow.keras as keras
 import utils
 import d2v_model
+import os
+import sys
 
 class Predictor(ABC):
   @classmethod
   def make(cls, name):
+    mpath = utils.get_path('models/unlabeled/%s/fv'%(name))
     if(name == RandForestPredictor.name()):
-      return RandForestPredictor()
+      if(os.path.exists(mpath)):
+        return RandForestPredictor(mpath)
+      else:
+        return RandForestPredictor()
     elif(name == ShallowNNPredictor.name()):
-      return ShallowNNPredictor() 
+      if(os.path.exists(mpath)):
+        return ShallowNNPredictor(mpath) 
+      else:
+        return ShallowNNPredictor()
 
   @abstractmethod
   def predict(self, vector):
@@ -19,8 +28,12 @@ class Predictor(ABC):
   @abstractmethod
   def save(self, path):
     pass
-
+  
 class RandForestPredictor(Predictor):
+
+  def __init__(self, path=None):
+    pass
+
   @classmethod
   def name(cls):
     return 'rand-forest'
@@ -32,22 +45,20 @@ class RandForestPredictor(Predictor):
     pass
 
 class ShallowNNPredictor(Predictor):
-  def __init__(self, NumTopics=40, BatchSize=32):
-    self.fv_buffer = [None]*BatchSize
-    self.buf_ptr = 0
-
-    self.model = keras.model.Sequential()
-    self.model.add(keras.Input(d2v_model.d2v_vect_length()))
-    self.model.add(keras.layers.Dense(40, activation='relu'))
-    self.model.add(keras.layers.Dense(1, activation='relu'))
+  def __init__(self, path=None, NumTopics=40):
+    if(path == None):
+      self.model = keras.Sequential()
+      self.model.add(keras.Input(d2v_model.d2v_vect_length()))
+      self.model.add(keras.layers.Dense(40, activation='relu'))
+      self.model.add(keras.layers.Dense(1, activation='relu'))
+    else:
+      self.model = keras.models.load_model(path)
    
   @classmethod
   def name(cls): 
     return 'shallow-nn'
 
   def predict(self, data):
-    if(buf_ptr < len(fv_buffer)):
-      # train on the buffer feature_vector
     return False
   
   def save(self, path):

@@ -6,6 +6,7 @@ import w2v_model
 from gensim.parsing.preprocessing import STOPWORDS
 from bs4 import BeautifulSoup
 from abc import ABC, abstractmethod
+import sys
 
 class Preprocessor(ABC):
   @classmethod
@@ -18,7 +19,7 @@ class Preprocessor(ABC):
   @abstractmethod
   def preprocess(self, text):
     pass
-
+  
 '''
 Performs the following operations.
 
@@ -31,8 +32,7 @@ Performs the following operations.
 '''
 class TextCleaner(Preprocessor):
   NonAlphRegex = re.compile(r'\.|[A-Za-z]+')
-  LiteralEscapeRegex = re.compile('\\r|\\n|\\t')
-  MinWordLength = 3
+  LiteralEscapeRegex = re.compile(r'\\r|\\n|\\t')
 
   def _remove_escape_chars(self, sstr):
     return re.sub(self.LiteralEscapeRegex, '', sstr)
@@ -41,7 +41,7 @@ class TextCleaner(Preprocessor):
     return filter(lambda tok : not(len(tok) == 0), tok_stream)
 
   def _tokenize_lowercase(self, sstr):
-    return _remove_zero_length_strs(re.split(r'[^A-Za-z\']+', sstr.lower()))
+    return self._remove_zero_length_strs(re.split(r'[^A-Za-z\']+', sstr.lower()))
 
   def _expand_contractions(self, tok_stream):
     return utils.flatmap(lambda tok : contractions.fix(tok).split(' '), tok_stream)
@@ -49,6 +49,27 @@ class TextCleaner(Preprocessor):
   def _non_alph_removal(self, tok_stream):
     return filter(lambda tok : self.NonAlphRegex.fullmatch(tok), tok_stream)
 
+  def preprocess(self, doc):
+    return list(utils.compose([
+      self._remove_escape_chars,
+      self._tokenize_lowercase, 
+      self._expand_contractions,
+      self._non_alph_removal
+    ], doc))
+
+class EntityFinder(Preprocessor):
+  RGX = re.compile(r'(([A-Z][a-z]+\s+)*([A-Z][a-z]+))\b')
+  MinWordLength = 3
+
+  def _std_spaces(self, doc):
+    return re.sub(r'\s+', ' ', doc)
+
+  def _get_entity_iterator(self, doc):
+    return self.RGX.finditer(re.sub(r'\s+', ' ', doc))
+
+  def _get_entities(self, ety_iter):
+    return map(lambda match : match.group().lower(), ety_iter)
+   
   def _stop_word_removal(self, tok_stream):
     return filter(lambda tok : not(tok in STOPWORDS), tok_stream)
 
@@ -60,17 +81,10 @@ class TextCleaner(Preprocessor):
 
   def preprocess(self, doc):
     return list(utils.compose([
-      _remove_escape_chars,
-      _tokenize_lowercase, 
-      _expand_contractions,
-      _non_alph_removal,
-      _stop_word_removal,
-      _oov_removal,
-      _small_word_removal
+      self._std_spaces,
+      self._get_entity_iterator,
+      self._get_entities,
+      self._stop_word_removal,
+      self._small_word_removal,
+      self._oov_removal
     ], doc))
-
-class EntityFinder(Preprocessor):
-  RGX = re.compile(r'(([A-Z][a-z]+\s*)+)')
-
-  def preprocess(txt):
-    return [match.group().lower() for match in RGX.finditer(txt)]

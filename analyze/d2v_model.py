@@ -9,4 +9,3 @@ def d2v_vect_length():
 
 def get_d2v_model():
   return d2v
-

@@ -16,7 +16,7 @@ def init_if_needed():
   if(curr_id == None):
     raise RuntimeError('email not present.')
   elif(not(curr_id in models)):
-    models[curr_id] = model.UselessModel()
+    models[curr_id] = model.VotingModel()
   return models[curr_id]
 
 def update_curr_id(cid):
@@ -44,12 +44,6 @@ def labeling_page():
   else:
     pass
 
-def log(msg):
-  f = open('log.txt', 'a')
-  f.write(msg)
-  f.write('\n')
-  f.close()
-
 @app.route('/decide', methods = ['POST'])
 def decide_block():
   jsn = request.get_json()
@@ -69,7 +63,7 @@ def interrupt_handler():
   for (email, model_) in models.items():
     dir_path = user_dir_path(email)
     if(not(os.path.exists(dir_path))):
-      os.path.makedirs(dir_path)
+      os.path.makedirs(dir_path, exist_ok=True)
     model_.save(dir_path)
 
 # run

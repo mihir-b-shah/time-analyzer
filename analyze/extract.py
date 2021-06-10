@@ -2,6 +2,8 @@
 from abc import ABC, abstractmethod
 import d2v_model
 import w2v_model
+import functools
+import utils
 
 '''
 Note a much more efficient apporach:
@@ -27,12 +29,12 @@ class D2vExtractor(FeatureExtractor):
   def __init__(self):
     self.mdl = d2v_model.get_d2v_model()  
 
-  def extract_fv(words):
+  def extract_fv(self, words):
     return self.mdl.infer_vector(words)
 
 class W2vExtractor(FeatureExtractor):
   def __init__(self):
     self.mdl = w2v_model.get_w2v_model()
 
-  def extract_fv(words):
-    return reduce(lambda v1,v2 : v1+v2, map(lambda word : self.mdl[word], words))/len(words)
+  def extract_fv(self, words):
+    return functools.reduce(lambda v1,v2 : v1+v2, map(lambda word : self.mdl[word], words))/len(words)
