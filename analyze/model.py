@@ -58,12 +58,12 @@ class UselessModel(Model):
 
 class VotingModel(Model):
 
-  def __init__(self, Threshold=0.5):
+  def __init__(self, eid):
     self.models = [
-      Pipeline(Preprocessor.make('clean'), FeatureExtractor.make('d2v'), Predictor.make('shallow-nn')),
-      Pipeline(Preprocessor.make('entity'), FeatureExtractor.make('w2v-avg'), Predictor.make('rand-forest'))
+      Pipeline(Preprocessor.make('clean'), FeatureExtractor.make('d2v'), Predictor.make('shallow-nn', eid), eid),
+      Pipeline(Preprocessor.make('entity'), FeatureExtractor.make('w2v-avg'), Predictor.make('rand-forest', eid), eid)
     ]
-    self.voter = Voter(self.models, Threshold)
+    self.voter = Voter(self.models, 0.5)
 
   def insert_and_decide(self, email, txt):
     ret = self.voter.predict(txt)
@@ -79,4 +79,4 @@ class VotingModel(Model):
 
   def save(self, path):
     for model in self.models:
-      model.save(os.path.join(path, model.name()))
+      model.save(os.path.join(path, model.name(), 'model'))

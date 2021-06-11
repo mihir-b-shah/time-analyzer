@@ -8,15 +8,15 @@ import os
 
 # one preprocessor, one extractor, one predictor
 class Pipeline:
-  def __init__(self, pre, extr, pred):
+  def __init__(self, pre, extr, pred, eid):
     self.pre = pre 
     self.extr = extr
     self.pred = pred
 
-    mpath = utils.get_path('models/unlabeled/'+self.pred.name())
+    mpath = utils.get_path(('models/users/%s/'%(eid))+self.pred.name())
     if(not(os.path.exists(mpath))):
       os.makedirs(mpath, exist_ok=True)
-    self.fhandle = open(mpath+'fv', 'ab')
+    self.fhandle = open(mpath+'/unlabel_fv', 'ab')
     
   def __del__(self):
     self.fhandle.flush()
@@ -26,15 +26,14 @@ class Pipeline:
   Note the structure of models:
   
   models/
-    unlabeled/
-      shallow-nn/
-        fv
-      rand-forest/
-        fv
     users/
       <user-1>/
         shallow-nn/
+          unlabeled/
+          labeled/
         rand-forest/
+          unlabeled/
+          labeled/
       ...
     <doc2vec-models>
     <word2vec-models>
@@ -44,12 +43,12 @@ class Pipeline:
       self.fhandle.write(fv[i].tobytes())
 
   def predict(self, text):
-    utils.log('TEXT', str(text[0]))
-    utils.log('PP_TYPE', str(type(self.pre)))
-    utils.log('PP_RES', str(self.pre.preprocess(text[0])))
     fv = self.extr.extract_fv(self.pre.preprocess(text[0]))
     self.save_fv(fv)
     return self.pred.predict(fv)
 
   def save(self, path):
     self.pred.save(path)
+
+  def name(self):
+    return self.pred.name()

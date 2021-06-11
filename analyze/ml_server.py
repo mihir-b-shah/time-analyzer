@@ -16,7 +16,7 @@ def init_if_needed():
   if(curr_id == None):
     raise RuntimeError('email not present.')
   elif(not(curr_id in models)):
-    models[curr_id] = model.VotingModel()
+    models[curr_id] = model.VotingModel(curr_id)
   return models[curr_id]
 
 def update_curr_id(cid):
@@ -55,13 +55,13 @@ def decide_block():
   return ret
   
 def user_dir_path(email):
-  return utils.get_path('models/users/%s'%(email))
+  return utils.get_path('models/users/%s/'%(email))
 
 # exit strategy-handles Ctrl-C signal too
 @atexit.register
 def interrupt_handler():
-  for (email, model_) in models.items():
-    dir_path = user_dir_path(email)
+  for (eid, model_) in models.items():
+    dir_path = user_dir_path(eid)
     if(not(os.path.exists(dir_path))):
       os.path.makedirs(dir_path, exist_ok=True)
     model_.save(dir_path)
