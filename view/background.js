@@ -167,7 +167,7 @@ chrome.history.onVisited.addListener((historyItem) => {
             fetch("http://localhost:5050/decide", { 
                 method: "POST",
                 
-                body: JSON.stringify({'id':userEmail, 'data':text}), 
+                body: JSON.stringify({'id':userEmail, 'url':historyItem.url, 'data':text}), 
 
                 headers: { 
                     "Content-type": "application/json; charset=UTF-8"

@@ -15,26 +15,36 @@ then send the feature vector down.
 
 class FeatureExtractor(ABC):
   @classmethod
-  def make(cls, name):
+  def make(cls, name, pp):
     if(name == 'd2v'):
-      return D2vExtractor()
+      return D2vExtractor(pp)
     elif(name == 'w2v-avg'):
-      return W2vExtractor() 
+      return W2vExtractor(pp) 
+
+  def __init__(self, pp):
+    self.pp = pp
+
+  def extract_fv(self, bef_txt):
+    utils.log('TXT', str(type(bef_txt)))
+    txt = self.pp.preprocess(bef_txt)
+    return self._extract_fv(txt)
 
   @abstractmethod
-  def extract_fv(self, text):
+  def _extract_fv(self, text):
     pass
 
 class D2vExtractor(FeatureExtractor):
-  def __init__(self):
+  def __init__(self, pp):
+    super().__init__(pp)
     self.mdl = d2v_model.get_d2v_model()  
 
-  def extract_fv(self, words):
+  def _extract_fv(self, words):
     return self.mdl.infer_vector(words)
 
 class W2vExtractor(FeatureExtractor):
-  def __init__(self):
+  def __init__(self, pp):
+    super().__init__(pp)
     self.mdl = w2v_model.get_w2v_model()
 
-  def extract_fv(self, words):
+  def _extract_fv(self, words):
     return functools.reduce(lambda v1,v2 : v1+v2, map(lambda word : self.mdl[word], words))/len(words)

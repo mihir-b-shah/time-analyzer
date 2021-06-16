@@ -44,7 +44,7 @@ class Database extends evem.EventEmitter {
     insert(email, url, wasted, start, end){
         const _email = email.substr(0, Math.min(email.length, 256));
         const _host = url.hostname.substr(0, Math.min(url.hostname.length, 128));
-        const _url = url.href.substr(0, Math.min(url.href.length, 512));
+        const _url = url.href.substr(0, Math.min(url.href.length, 256));
 
         const InsertEvent =
             'insert into Events (email, url, host, wasted, start, end) '+

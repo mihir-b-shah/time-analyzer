@@ -7,15 +7,23 @@ import os
 import sys
 
 class Predictor(ABC):
+
+  def __init__(self, extractor):
+    self.extr = extractor
+
   @classmethod
-  def make(cls, name, eid):
+  def make(cls, name, eid, extr):
     if(name == RandForestPredictor.name()):
-      return RandForestPredictor(eid)
+      return RandForestPredictor(eid, extr)
     elif(name == ShallowNNPredictor.name()):
-      return ShallowNNPredictor(eid) 
+      return ShallowNNPredictor(eid, extr) 
+
+  def predict(self, txt):
+    fv = self.extr.extract_fv(txt)
+    return fv, self._predict(fv)
 
   @abstractmethod
-  def predict(self, vector):
+  def _predict(self, vector):
     pass
 
   @abstractmethod
@@ -24,21 +32,23 @@ class Predictor(ABC):
   
 class RandForestPredictor(Predictor):
 
-  def __init__(self, eid):
+  def __init__(self, eid, extr):
+    super().__init__(extr)
     pass
 
   @classmethod
   def name(cls):
     return 'rand-forest'
 
-  def predict(self, data):
+  def _predict(self, data):
     return False
 
   def save(self, path):
     pass
 
 class ShallowNNPredictor(Predictor):
-  def __init__(self, eid):
+  def __init__(self, eid, extractor):
+    super().__init__(extractor)
     self.eid = eid
     mpath = utils.get_path('models/users/%s/%s/model'%(self.eid, self.name()))
     if(os.path.exists(mpath)):
@@ -53,7 +63,7 @@ class ShallowNNPredictor(Predictor):
   def name(cls): 
     return 'shallow-nn'
 
-  def predict(self, data):
+  def _predict(self, data):
     return False
   
   def save(self, path):
