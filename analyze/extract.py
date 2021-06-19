@@ -4,6 +4,7 @@ import d2v_model
 import w2v_model
 import functools
 import utils
+import numpy as np
 
 '''
 Note a much more efficient apporach:
@@ -47,4 +48,7 @@ class W2vExtractor(FeatureExtractor):
     self.mdl = w2v_model.get_w2v_model()
 
   def _extract_fv(self, words):
-    return functools.reduce(lambda v1,v2 : v1+v2, map(lambda word : self.mdl[word], words))/len(words)
+    if(len(words) == 0):
+      return np.zeros((w2v_model.w2v_vect_length(),)) 
+    else:
+      return functools.reduce(lambda v1,v2 : v1+v2, map(lambda word : self.mdl[word], words))/len(words)

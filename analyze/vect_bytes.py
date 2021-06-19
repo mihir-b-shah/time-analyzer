@@ -5,7 +5,7 @@ import numpy as np
 Utilities to read and write numpy vectors of to my memory file
 '''
 
-def write_entry(fhandle, tupl):
+def write_entries(fhandle, tupl):
   url, vs = tupl
   fhandle.write(bytes(len(url)))
   fhandle.write(bytes(url, encoding='utf8'))
@@ -13,12 +13,12 @@ def write_entry(fhandle, tupl):
     fhandle.write(vs[i].tobytes())
 
 # size is either 100 or 300 of vectors
-def read_entry(fhandle, size, n):
-  url_len = fhandle.read(1)
+def read_entries(fhandle, sizes, n):
+  url_len = int.from_bytes(fhandle.read(1), byteorder='little')
   url = fhandle.read(url_len)
 
   vs = [None]*n
   for i in range(n):
-    vs[i] = np.ndarray((size,), np.float32, fhandle.read(size*4))
+    vs[i] = np.ndarray((sizes[i],), np.float32, fhandle.read(sizes[i]*4))
 
   return (url, vs)

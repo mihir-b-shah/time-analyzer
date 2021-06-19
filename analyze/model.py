@@ -88,7 +88,8 @@ class VotingModel(Model):
     self.fhandle.close()
   
   def save_fv(self, url, fvs):
-    vect_bytes.write_entry(self.fhandle, (url, fvs)) 
+    utils.log('URL', url)
+    vect_bytes.write_entries(self.fhandle, (url, fvs)) 
 
   def insert_and_decide(self, url, txt):
     sm = 0

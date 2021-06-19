@@ -10,6 +10,9 @@ w2v_model = KeyedVectors.load(get_tmpfile(utils.get_path('models/vectors.kv')), 
 
 def in_corpus(word):
   return word in w2v_model.vocab
+ 
+def freq(word):
+  return w2v_model.get_vecattr(word, 'count')
 
 def get_w2v_model():
   return w2v_model
