@@ -6,6 +6,7 @@ from predict import Predictor
 import os
 import utils
 import vect_bytes
+from actv_learn import ActiveLearner
 
 class Model(ABC):
 
@@ -77,19 +78,9 @@ class VotingModel(Model):
       Predictor.make('shallow-nn', eid, FeatureExtractor.make('d2v', Preprocessor.make('clean'))),
       Predictor.make('rand-forest', eid, FeatureExtractor.make('w2v-avg', Preprocessor.make('entity')))
     ]
-    mpath = utils.get_path('models/users/%s'%(eid))
-    if(not(os.path.exists(mpath))):
-      os.makedirs(mpath, exist_ok=True)
-    self.fhandle = open(mpath+'/unlabel_fv', 'ab')
     self.fvs = [None]*len(self.models)
+    self.learner = ActiveLearner(self.fhandle, self.models)
   
-  def __del__(self):
-    self.fhandle.flush()
-    self.fhandle.close()
-  
-  def save_fv(self, url, fvs):
-    vect_bytes.write_entries(self.fhandle, (url, fvs)) 
-
   def insert_and_decide(self, url, txt):
     sm = 0
     for i,model in enumerate(self.models):
@@ -97,17 +88,14 @@ class VotingModel(Model):
       self.fvs[i] = fv
       sm += mpred
 
-    # query by disagreements strategy
-    if(True): #abs(sm-0.5) < 0.1):
-      self.save_fv(url, self.fvs)
-      
+    self.learner.accept_unlabeled(url, self.fvs)
     return sm >= 0.5*len(self.models)
 
   def list_to_label(self):
-    return []
+    return self.learner.make_queries()
 
   def process_labels(self, lbls):
-    pass
+    self.learner.accept_labels(lbls)
   
   def update_topics(self, topics):
     pass
