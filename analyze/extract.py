@@ -26,7 +26,6 @@ class FeatureExtractor(ABC):
     self.pp = pp
 
   def extract_fv(self, bef_txt):
-    utils.log('TXT', str(type(bef_txt)))
     txt = self.pp.preprocess(bef_txt)
     return self._extract_fv(txt)
 

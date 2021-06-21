@@ -1,0 +1,25 @@
+
+Active learning techniques:
+
+1. Uncertainty sampling - points that are predicted least accurately, annotate. Be sure to weight them appropriately as to not skew the distribution.
+
+2. Query by disagreement - we have two models - general G and specific S. If we think of the parameter set of the model P, the general model has some countably larger set of parameters than the specific, in some sortable way. Then, there is a zone of disagreement (where G and S satisfy currently labeled data), where we should query. To keep G and S from arbitrarily converging, we train G with artificially positive labels from the disagreement zone and S with negative ones.
+
+3. Minimizing expected error - over all possible unlabeled instances, over all possible labels, minimize potential error on a model augmented by the instance labeled.
+
+4. Minimizing expected variance - similar but minimizing the spread of the prediction from forecasted actual, but only works for logistic/linear models.
+
+5. Density weighted - weight a traditional uncertainty measure with a density-based, metric, i.e. guard against the probability that something is an outlier
+
+6. Hierarchial sampling - first perform some coarse sampling. Then, query the purity of each cluster - i.e. select some points in each cluster, and if insufficiently pure, break it up. Have some threshold. Also have some lower-bound probabilities for the real purity of each cluster.
+
+7. Co-training (semi-supervised) - have two models whose feature spaces are conditionally independent. Train them both separately on labeled data. After this, for each unlabeled, take the more confident of the two predictions, and write that as the label for that instance.
+
+8. Multiple learning - have user label features that are conducive to one class or another. I.e. let the user give broad categories that should be blocked too, and then have the engine search for those on google or something.
+
+9. Tuples of questions - ask about a group of features - i.e. 1,2,3,4 - rank them or something else - can give a lot of info too. Also possibly. Also to address issues of skew (i.e. 10000 to 1 waste-time labels to not waste-time), try letting the user get more choices and manually sift through. A small multiple of what we would have given otherwise may be usually sufficient.
+
+10. A bad oracle - not usually a problem but worth puting a particle filter in the middle. Also cross-checking with other users may be useful in this case. Bad oracle usually at the start/end of a task or when starting off with the product. (In follow-up work, Donmez et al. (2010) used a particle filter to deal with noisy oracles whose quality varies over time (e.g., improving after becoming more
+familiar with the task, or degrading after becoming fatigued).
+
+11. stopping criteria for learning - some kind of plateau-ing criteria

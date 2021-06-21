@@ -7,7 +7,7 @@ Utilities to read and write numpy vectors of to my memory file
 
 def write_entries(fhandle, tupl):
   url, vs = tupl
-  fhandle.write(bytes(len(url)))
+  fhandle.write(bytes([len(url)]))
   fhandle.write(bytes(url, encoding='utf8'))
   for i in range(len(vs)):
     fhandle.write(vs[i].tobytes())

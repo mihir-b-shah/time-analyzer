@@ -88,7 +88,6 @@ class VotingModel(Model):
     self.fhandle.close()
   
   def save_fv(self, url, fvs):
-    utils.log('URL', url)
     vect_bytes.write_entries(self.fhandle, (url, fvs)) 
 
   def insert_and_decide(self, url, txt):
@@ -98,6 +97,7 @@ class VotingModel(Model):
       self.fvs[i] = fv
       sm += mpred
 
+    # query by disagreements strategy
     if(True): #abs(sm-0.5) < 0.1):
       self.save_fv(url, self.fvs)
       
