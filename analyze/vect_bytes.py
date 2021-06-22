@@ -14,7 +14,11 @@ def write_entries(fhandle, tupl):
 
 # size is either 100 or 300 of vectors
 def read_entries(fhandle, sizes, n):
-  url_len = int.from_bytes(fhandle.read(1), byteorder='little')
+  url_len_bytes = fhandle.read(1)
+  if(not(url_len_bytes)):
+    return None
+
+  url_len = int.from_bytes(url_len_bytes, byteorder='little')
   url = fhandle.read(url_len)
 
   vs = [None]*n
