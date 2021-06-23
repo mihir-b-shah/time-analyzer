@@ -27,6 +27,10 @@ class Predictor(ABC):
     pass
 
   @abstractmethod
+  def want_label(self, v):
+    return True
+
+  @abstractmethod
   def save(self, path):
     pass
   
@@ -42,6 +46,9 @@ class RandForestPredictor(Predictor):
 
   def _predict(self, data):
     return False
+  
+  def want_label(self, v):
+    pass
 
   def save(self, path):
     pass
@@ -65,6 +72,10 @@ class ShallowNNPredictor(Predictor):
 
   def _predict(self, data):
     return False
+
+  @abstractmethod
+  def want_label(self, v):
+    return True
   
   def save(self, path):
     self.model.save(path)

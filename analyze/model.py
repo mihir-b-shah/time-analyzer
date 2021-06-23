@@ -6,7 +6,7 @@ from predict import Predictor
 import os
 import utils
 import vect_bytes
-from actv_learn import ActiveLearner
+from actv_learn import LearnerSystem
 
 class Model(ABC):
 
@@ -79,7 +79,7 @@ class VotingModel(Model):
       Predictor.make('rand-forest', eid, FeatureExtractor.make('w2v-avg', Preprocessor.make('entity')))
     ]
     self.fvs = [None]*len(self.models)
-    self.learner = ActiveLearner(self.fhandle, self.models)
+    self.learner = LearnerSystem(eid, self.models)
   
   def insert_and_decide(self, url, txt):
     sm = 0

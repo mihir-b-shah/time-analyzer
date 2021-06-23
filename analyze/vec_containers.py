@@ -19,3 +19,12 @@ class VectorBag:
 
   def __init__(self, stack):
     self.stack = stack
+
+  # the only way uncertainty sampling can have linear cost.
+  def sample(self, predicate, k, n):
+    ret = []
+    for i in range(len(self.stack), len(self.stack)-n, -1):
+      if(predicate((len(ret), i, k, n), self.stack[-1])):
+        ret.append(self.stack[-1])
+      self.stack.pop() 
+    return ret
