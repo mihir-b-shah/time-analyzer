@@ -7,6 +7,13 @@ import re
 import os
 import utils
 
+'''
+Three possible modes for the extension:
+1. collect & block
+2. collect & do not block -> allows us to track in the breakdown whether time-waste or not
+3. do not collect
+'''
+
 app = Flask(__name__)
 models = {}
 logging.basicConfig(level=logging.DEBUG)

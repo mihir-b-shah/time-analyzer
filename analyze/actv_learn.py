@@ -2,18 +2,15 @@
 import utils
 import os
 import vec_containers
-
-'''
-idea is, do active learning on the first vector set and use
-the second to verify against first
-'''
+from sampler import Sampler
 
 class LearnerSystem:
   def __init__(self, eid, models):
+    self.models = models
     mpath = utils.get_path('models/users/%s'%(eid))
     if(not(os.path.exists(mpath))):
       os.makedirs(mpath, exist_ok=True)
-    u_bag = vec_containers.VectorBag(mpath+'/unlabel_fv')
+    u_bag = vec_containers.VectorBag(mpath+'/unlabel_fv', Sampler.make('random'))
 
   def __del__(self):
     pass
@@ -24,7 +21,7 @@ class LearnerSystem:
   3. Active Learner (for each model, decide whether useful)
   4. Voter (combine the useful/not-useful decisions) on whether to request the sample
   '''
-  def make_queries(self):
-    samples = u_bag.sample(FUNC, K, N)
-    
-    pass
+  def make_queries(self, thr):
+    return list(filter(lambda take: 
+                sum(map(lambda i,fv:self.models[i].want_label(fv), 
+                enumerate(samples)))/len(self.models) >= thr, samples))
